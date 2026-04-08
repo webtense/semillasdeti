@@ -6,7 +6,7 @@ import node from '@astrojs/node';
 
 export default defineConfig({
 	site: 'https://semillasdeti.com',
-	output: 'hybrid',
+	output: 'server',
 	adapter: node({ mode: 'standalone' }),
 	integrations: [tailwind()],
 });

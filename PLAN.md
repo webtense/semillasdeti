@@ -87,7 +87,7 @@ Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + e
    - Tipo: “Custom / Node app” para ejecutar `dist/server/entry.mjs`.
    - Conecta el repo o sube el código.
 3. **Variables y comandos**
-   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`, `PORT`.
+   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`, `PORT` (usamos `4173` para liberar `8080`).
    - Build: `cd web && npm install && npm run build`.
    - Start: `cd web/dist && node ./server/entry.mjs` (el adaptador respeta `PORT`).
 4. **Dominios y SSL**

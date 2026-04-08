@@ -55,12 +55,12 @@ Puedes personalizar el texto que aparecerá al abrir la conversación modificand
 2. **Crear proyecto en Easypanel**
    - Accede con las credenciales guardadas en `.env` (`EASYPANEL_URL`, `EASYPANEL_USER`, `EASYPANEL_PASSWORD`).
    - Crea una app tipo “Custom (Dockerfile/Node)” para poder ejecutar el servidor Node.
-   - Variables mínimas: `PORT=8080` (o el que Easypanel asigne), `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`.
+   - Variables mínimas: `PORT=4173` (u otro disponible), `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`.
 
 3. **Pipeline de build**
    - `Build command`: `cd web && npm install && npm run build`.
    - `Start command`: `cd web/dist && node ./server/entry.mjs`.
-   - Asegúrate de que la app escuche en `process.env.PORT` (el adaptador Node ya respeta esa variable).
+   - Asegúrate de que la app escuche en `process.env.PORT` (el adaptador Node ya respeta esa variable). Por defecto usamos `4173` para evitar conflictos con el puerto `8080`, ocupado por Docker.
 
 4. **Dominios y SSL**
    - En Easypanel agrega `semillasdeti.com` y `www.semillasdeti.com`.
