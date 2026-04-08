@@ -77,9 +77,8 @@ const defaultWhatsappMessage =
 	'Hola Zoraida, me gustaría reservar una llamada para conocerte mejor.';
 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultWhatsappMessage)}`;
 
-const brevoFormAction = import.meta.env.PUBLIC_BREVO_FORM_ACTION || '';
 const brevoListId = import.meta.env.PUBLIC_BREVO_LIST_ID || '';
-const newsletterDisabled = !brevoFormAction || !brevoListId;
+const newsletterDisabled = !brevoListId || !import.meta.env.BREVO_API_KEY;
 const currentYear = new Date().getFullYear();
 ---
 
@@ -283,19 +282,13 @@ const currentYear = new Date().getFullYear();
 						Historias reales, ejercicios breves y recordatorios para reconectar contigo. Un correo a la semana,
 						sin ruido.
 					</p>
-					<form
-						class={`mt-6 space-y-4 ${newsletterDisabled ? 'opacity-70 pointer-events-none' : ''}`}
-						action={newsletterDisabled ? undefined : brevoFormAction}
-						method="post"
-						target="_blank"
-						rel="noreferrer"
-					>
+					<form class={`mt-6 space-y-4 ${newsletterDisabled ? 'opacity-60 pointer-events-none' : ''}`} id="newsletter-form">
 						<input type="hidden" name="listid" value={brevoListId} />
 						<div>
 							<label class="text-sm text-cacao/70">Nombre</label>
 							<input
 								type="text"
-								name="FIRSTNAME"
+								name="firstName"
 								required
 								placeholder="Tu nombre"
 								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
@@ -305,7 +298,7 @@ const currentYear = new Date().getFullYear();
 							<label class="text-sm text-cacao/70">Correo</label>
 							<input
 								type="email"
-								name="EMAIL"
+								name="email"
 								required
 								placeholder="tu@email.com"
 								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
@@ -317,11 +310,11 @@ const currentYear = new Date().getFullYear();
 						<button type="submit" class="w-full rounded-full bg-sienna text-white py-3 font-medium">
 							Quiero la guía
 						</button>
+						<p id="newsletter-status" class="text-sm text-cacao/70"></p>
 					</form>
 					{newsletterDisabled && (
 						<p class="text-xs text-cacao/60 mt-3">
-							⚠️ Conecta tu formulario de Brevo añadiendo PUBLIC_BREVO_FORM_ACTION y PUBLIC_BREVO_LIST_ID en el
-							`.env`.
+							⚠️ Completa `BREVO_API_KEY` y `PUBLIC_BREVO_LIST_ID` en `web/.env` para habilitar la newsletter.
 						</p>
 					)}
 				</div>
@@ -391,4 +384,41 @@ const currentYear = new Date().getFullYear();
 	>
 		<span class="text-sm font-semibold">WhatsApp</span>
 	</a>
+
+	<script is:inline>
+		const form = document.querySelector('#newsletter-form');
+		const status = document.querySelector('#newsletter-status');
+		const button = form?.querySelector('button[type="submit"]');
+		if (form && status && button) {
+			form.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				status.textContent = 'Enviando...';
+				status.className = 'text-sm text-cacao/60';
+				button.disabled = true;
+				const formData = new FormData(form);
+				const payload = {
+					firstName: String(formData.get('firstName') || ''),
+					email: String(formData.get('email') || ''),
+				};
+				try {
+					const response = await fetch('/api/newsletter', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(payload),
+					});
+					const result = await response.json().catch(() => ({ message: 'Error inesperado' }));
+					status.textContent = result.message || (response.ok ? 'Gracias por suscribirte.' : 'No se pudo procesar tu solicitud.');
+					status.className = response.ok ? 'text-sm text-sage font-medium' : 'text-sm text-sienna font-medium';
+					if (response.ok) {
+						form.reset();
+					}
+				} catch (error) {
+					status.textContent = 'No pudimos conectar con el servicio. Intenta de nuevo en unos minutos.';
+					status.className = 'text-sm text-sienna font-medium';
+				} finally {
+					button.disabled = false;
+				}
+			}, { passive: false });
+		}
+	</script>
 </Layout>

@@ -1,6 +1,6 @@
 # Plan completo de despliegue – Semillas de Ti
 
-Este plan cubre todas las fases para lanzar la nueva landing estática de Semillas de Ti en Easypanel, incluyendo contenido, desarrollo, despliegue, newsletter y publicación en GitHub.
+Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + endpoint Brevo) de Semillas de Ti en Easypanel, incluyendo contenido, desarrollo, despliegue, newsletter y publicación en GitHub.
 
 ## 1. Contenido y diseño
 
@@ -27,6 +27,7 @@ Este plan cubre todas las fases para lanzar la nueva landing estática de Semill
 1. **Proyecto Astro + Tailwind** (carpeta `web/` ya creada):
    - `npm install`
    - `npx astro add tailwind`
+   - `npm install @astrojs/node` para exponer `/api/newsletter`.
 2. **Tailwind config**
    - Extender colores, fuentes y sombras (ver `tailwind.config.mjs`).
 3. **Estilos globales**
@@ -34,19 +35,19 @@ Este plan cubre todas las fases para lanzar la nueva landing estática de Semill
 4. **Componentes clave**
    - `src/layouts/Layout.astro`: metas, fuentes, body base.
    - `src/pages/index.astro`: landing completa.
-5. **Variables de entorno (frontend)**
+5. **Variables de entorno**
    - `web/.env` (copiar de `.env.example`).
-   - `PUBLIC_BREVO_FORM_ACTION`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`.
+   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`.
 6. **Build de verificación**
    - `npm run build` en `web/`.
 
 ## 3. Newsletter Brevo
 
-1. Crear formulario embebido en Brevo (Marketing → Formularios).
-2. Copiar la URL de acción (`https://xxx.sibforms.com/serve/...`).
-3. Obtener el `listid` asociado y completarlo en `web/.env`.
-4. Activar doble opt-in en Brevo.
-5. Verificar el formulario de la web (sección “Newsletter cálida”) tras desplegar.
+1. Crear lista en Brevo y obtener su `listId`.
+2. Generar API Key (`xkeysib-...`) y guardarla en `BREVO_API_KEY`.
+3. El formulario `Newsletter cálida` llama a `/api/newsletter` → Brevo, por lo que no se necesitan `sibforms`.
+4. Activar doble opt-in / automatizaciones desde Brevo.
+5. Verificar `POST /api/newsletter` tras desplegar.
 
 ## 4. CTA WhatsApp
 
@@ -82,10 +83,12 @@ Este plan cubre todas las fases para lanzar la nueva landing estática de Semill
    - URL: `EASYPANEL_URL`
    - Usuario / contraseña en `.env`.
 2. **Crear app**
-   - Tipo: “Static Site”.
-   - Fuentes: repo GitHub o upload manual del contenido `web/dist`.
-3. **Variables**
-   - Si se usa build automático, configurar `NODE_VERSION=20` (o la disponible) y `NPM_BUILD_COMMAND="cd web && npm install && npm run build"`.
+   - Tipo: “Custom / Node app” para ejecutar `dist/server/entry.mjs`.
+   - Conecta el repo o sube el código.
+3. **Variables y comandos**
+   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`, `PORT`.
+   - Build: `cd web && npm install && npm run build`.
+   - Start: `cd web/dist && node ./server/entry.mjs` (el adaptador respeta `PORT`).
 4. **Dominios y SSL**
    - Agregar `semillasdeti.com` y `www.semillasdeti.com`.
    - En DNS, apuntar registros A a la IP del servidor (`SERVER_HOST`).

@@ -2,9 +2,9 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-	readonly PUBLIC_BREVO_FORM_ACTION?: string;
 	readonly PUBLIC_BREVO_LIST_ID?: string;
 	readonly PUBLIC_WHATSAPP_MESSAGE?: string;
+	readonly BREVO_API_KEY?: string;
 }
 
 interface ImportMeta {

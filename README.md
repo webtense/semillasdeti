@@ -1,6 +1,6 @@
 # Semillas de Ti – Landing de Coaching
 
-Landing page cálida y moderna para presentar los servicios de coaching de **Zoraida Pozo Barrio**. El sitio está construido con Astro + Tailwind y pensado para desplegarse como sitio estático en Easypanel bajo el dominio `semillasdeti.com`.
+Landing page cálida y moderna para presentar los servicios de coaching de **Zoraida Pozo Barrio**. El sitio está construido con Astro + Tailwind y ahora utiliza el adaptador Node (modo híbrido) para exponer un endpoint propio (`/api/newsletter`) que habla con la API de Brevo.
 
 ## Estructura del repositorio
 
@@ -20,23 +20,23 @@ cp .env.example .env # y completa los valores públicos
 npm run dev
 ```
 
-### Variables públicas necesarias (`web/.env`)
+### Variables necesarias (`web/.env`)
 
 | Variable | Uso |
 | --- | --- |
-| `PUBLIC_BREVO_FORM_ACTION` | URL de acción del formulario generado por Brevo (`sibforms`) |
-| `PUBLIC_BREVO_LIST_ID` | ID numérico de la lista/listas de Brevo a la que se enviarán los contactos |
+| `PUBLIC_BREVO_LIST_ID` | ID numérico de la lista de Brevo donde guardar los contactos |
 | `PUBLIC_WHATSAPP_MESSAGE` | Mensaje precargado para el CTA de WhatsApp |
+| `BREVO_API_KEY` | API Key (xkeysib-…) para consumir `https://api.brevo.com/v3/contacts` |
 
 > El archivo `web/.env.example` trae el formato que debes seguir. Copia el contenido en `web/.env` y actualiza los valores reales.
 
 ## Configuración de la newsletter (Brevo)
 
-1. En Brevo crea un formulario tipo embebido (Marketing → Formularios → Nuevo formulario).
-2. Copia la URL de acción que Brevo entrega (`https://xxx.sibforms.com/serve/...`). Ese valor va en `PUBLIC_BREVO_FORM_ACTION`.
-3. Anota el `listid` asociado al formulario y colócalo en `PUBLIC_BREVO_LIST_ID`.
-4. Si añades campos adicionales, respeta los nombres que Brevo espera (`FIRSTNAME`, `EMAIL`, etc.).
-5. Activa el doble opt-in desde Brevo para cumplir RGPD. El formulario de la web ya incluye el check de consentimiento.
+1. En Brevo crea una lista para Semillas de Ti y obtén su ID numérico.
+2. Genera una **API Key** tipo “Transactional & Marketing” (formato `xkeysib-...`).
+3. En `web/.env` establece `BREVO_API_KEY` y `PUBLIC_BREVO_LIST_ID` con esos valores.
+4. El formulario de la web envía peticiones `POST /api/newsletter` → `api.brevo.com/v3/contacts` y hace `updateEnabled=true`; no necesitas `sibforms`.
+5. Activa el doble opt-in / automation desde Brevo para enviar la guía cuando el contacto entre en la lista.
 
 ## CTA de WhatsApp
 
@@ -50,26 +50,27 @@ Puedes personalizar el texto que aparecerá al abrir la conversación modificand
    npm install
    npm run build
    ```
-   Esto genera el sitio estático en `web/dist`.
+   Genera `web/dist/` con dos carpetas importantes: `client/` (estático) y `server/` (Node standalone para `/api/newsletter`).
 
 2. **Crear proyecto en Easypanel**
    - Accede con las credenciales guardadas en `.env` (`EASYPANEL_URL`, `EASYPANEL_USER`, `EASYPANEL_PASSWORD`).
-   - Crea una nueva app tipo “Static Site”.
-   - Conecta el repositorio de GitHub `webtense/semillasdeti` o configura un despliegue manual subiendo los archivos de `dist`.
+   - Crea una app tipo “Custom (Dockerfile/Node)” para poder ejecutar el servidor Node.
+   - Variables mínimas: `PORT=8080` (o el que Easypanel asigne), `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`.
 
-3. **Configurar dominio y SSL**
-   - En Easypanel, agrega los dominios `semillasdeti.com` y `www.semillasdeti.com`.
-   - En el proveedor DNS apunta ambos dominios a la IP del servidor (`SERVER_HOST`).
-   - Una vez propagado, activa Let’s Encrypt en Easypanel para ambos hosts.
+3. **Pipeline de build**
+   - `Build command`: `cd web && npm install && npm run build`.
+   - `Start command`: `cd web/dist && node ./server/entry.mjs`.
+   - Asegúrate de que la app escuche en `process.env.PORT` (el adaptador Node ya respeta esa variable).
 
-4. **Deploy**
-   - Si usas GitHub, configura un deploy hook o ejecuta `npm run build` → subir el contenido de `dist` a la app.
-   - Verifica que `/`, secciones internas, CTA de WhatsApp y formulario de newsletter funcionen correctamente.
+4. **Dominios y SSL**
+   - En Easypanel agrega `semillasdeti.com` y `www.semillasdeti.com`.
+   - En el proveedor DNS apunta ambos registros A a `SERVER_HOST`.
+   - Cuando resuelvan, habilita Let’s Encrypt.
 
 5. **Post-deploy**
-   - Activa análisis y caché desde Easypanel o con un CDN ligero.
-   - Revisa Core Web Vitals con Lighthouse (desktop + mobile).
-   - Registra el sitio en Google Search Console y sube el `sitemap.xml` generado automáticamente por Astro.
+   - Verifica `/api/newsletter` con una petición `POST` de prueba.
+   - Comprueba Lighthouse (desktop + mobile) y actualiza Search Console + sitemap (`/sitemap.xml`).
+   - Configura backups y monitorización.
 
 ## Plan para subir a GitHub
 
@@ -88,6 +89,6 @@ Puedes personalizar el texto que aparecerá al abrir la conversación modificand
 
 - **Rotar credenciales**: después del primer push despliega nuevas contraseñas para Easypanel, servidor y token GitHub.
 - **Backups**: activa copias automáticas en el servidor y guarda una copia del `.env` en un gestor seguro.
-- **Formularios**: si necesitas un formulario de contacto con envío real, integra un servicio como Brevo, Formspree o una función serverless desde Easypanel.
+- **Formularios**: la newsletter ya usa la API de Brevo. Si quieres que el formulario de contacto también envíe correos, crea un endpoint similar o usa un servicio externo.
 
 Con esto tienes el plan completo para ejecutar, desplegar y mantener la nueva web de Semillas de Ti.
