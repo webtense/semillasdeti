@@ -60,7 +60,8 @@ Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + e
 1. `.gitignore` en la raíz (ya existe) ignora `node_modules`, `dist`, `.env` y subcarpetas.
 2. `.env` en la raíz (contiene credenciales Easypanel, servidor, token GitHub y Brevo API).
 3. `web/.env.example` documenta las variables públicas a completar.
-4. Documentación en `README.md` (uso del proyecto, Brevo, GitHub, Easypanel).
+4. Documentación en `README.md` (uso del proyecto, Brevo, GitHub, Easypanel y CI/CD).
+5. `.github/workflows/deploy.yml` y `ops/systemd/semillasdeti.service` gestionan el despliegue automatizado.
 
 ## 6. Publicación en GitHub
 
@@ -101,6 +102,17 @@ Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + e
 6. **Rotación de credenciales**
    - Cambiar contraseñas de Easypanel y servidor.
    - Guardar nuevas claves en un gestor seguro.
+
+## 9. Pipeline automatizado
+
+1. Configurar los secretos del repositorio (`SERVER_HOST`, `SERVER_USER`, `SERVER_PASSWORD`, `SERVER_SSH_PORT`).
+2. Copiar `ops/systemd/semillasdeti.service` a `/etc/systemd/system/`, editar si es necesario y ejecutar:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now semillasdeti
+   ```
+3. El workflow `deploy.yml` (push a `main` o manual) compila el sitio, lo sube a `/tmp` y reinicia el servicio.
+4. Monitorizar ejecuciones desde la pestaña Actions y revisar `journalctl -u semillasdeti -f` en el servidor tras cada despliegue.
 
 ## 8. Mantenimiento y siguientes pasos
 

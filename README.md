@@ -72,6 +72,34 @@ Puedes personalizar el texto que aparecerá al abrir la conversación modificand
    - Comprueba Lighthouse (desktop + mobile) y actualiza Search Console + sitemap (`/sitemap.xml`).
    - Configura backups y monitorización.
 
+## Automatización CI/CD (GitHub Actions)
+
+El workflow `.github/workflows/deploy.yml` permite construir y desplegar automáticamente en el servidor.
+
+1. **Secretos requeridos en el repo**
+   - `SERVER_HOST`: IP o dominio del servidor (ej. `webtenseenergy.com`).
+   - `SERVER_USER`: usuario SSH (`root` según tus datos).
+   - `SERVER_PASSWORD`: contraseña SSH.
+   - `SERVER_SSH_PORT`: puerto (22 por defecto).
+
+2. **¿Qué hace el workflow?**
+   - Instala dependencias en `web/` y ejecuta `npm run build` (modo híbrido).
+   - Comprime `web/dist` en `semillasdeti-dist.tar.gz`.
+   - Copia el archivo al servidor (`/tmp`).
+   - Desempaca en `/var/www/semillasdeti` y reinicia el servicio `systemctl restart semillasdeti`.
+
+3. **Servicio del sistema**
+   - Incluí `ops/systemd/semillasdeti.service` con la definición recomendada. Pasos:
+     ```bash
+     sudo cp ops/systemd/semillasdeti.service /etc/systemd/system/semillasdeti.service
+     sudo systemctl daemon-reload
+     sudo systemctl enable semillasdeti
+     sudo systemctl start semillasdeti
+     ```
+   - Ajusta `PORT` y `User` si lo necesitas. El workflow asume que el servicio existe y se puede reiniciar.
+
+Con esto, cada push a `main` (o ejecución manual) construirá y publicará la última versión automáticamente.
+
 ## Plan para subir a GitHub
 
 1. Inicializa git en la raíz del proyecto (esta carpeta). Los binarios y `.env` ya están ignorados en `.gitignore`.

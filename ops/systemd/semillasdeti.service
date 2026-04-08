@@ -1,0 +1,16 @@
+[Unit]
+Description=Semillas de Ti Astro service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/var/www/semillasdeti
+Environment=PORT=8080
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node server/entry.mjs
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
