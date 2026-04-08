@@ -87,7 +87,7 @@ Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + e
    - Tipo: “Custom / Node app” para ejecutar `dist/server/entry.mjs`.
    - Conecta el repo o sube el código.
 3. **Variables y comandos**
-   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`, `PORT` (usamos `4173` para liberar `8080`).
+   - `BREVO_API_KEY`, `PUBLIC_BREVO_LIST_ID`, `PUBLIC_WHATSAPP_MESSAGE`, `PORT` (usamos `4173` sobre la interfaz docker `172.17.0.1`).
    - Build: `cd web && npm install && npm run build`.
    - Start: `cd web/dist && node ./server/entry.mjs` (el adaptador respeta `PORT`).
 4. **Dominios y SSL**
@@ -106,7 +106,7 @@ Este plan cubre todas las fases para lanzar la nueva landing (Astro híbrido + e
 ## 9. Pipeline automatizado
 
 1. Configurar los secretos del repositorio (`SERVER_HOST`, `SERVER_USER`, `SERVER_PASSWORD`, `SERVER_SSH_PORT`).
-2. Copiar `ops/systemd/semillasdeti.service` a `/etc/systemd/system/`, editar si es necesario y ejecutar:
+2. Copiar `ops/systemd/semillasdeti.service` a `/etc/systemd/system/`, crear el usuario `semillasdeti` (sin shell) y ejecutar:
    ```bash
    sudo systemctl daemon-reload
    sudo systemctl enable --now semillasdeti

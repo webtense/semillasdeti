@@ -4,11 +4,12 @@ After=network.target
 
 [Service]
 Type=simple
-User=root
+User=semillasdeti
+Group=semillasdeti
 WorkingDirectory=/var/www/semillasdeti
 Environment=PORT=4173
 Environment=NODE_ENV=production
-Environment=HOST=0.0.0.0
+Environment=HOST=172.17.0.1
 EnvironmentFile=/etc/semillasdeti.env
 ExecStart=/usr/bin/env node server/entry.mjs
 Restart=always

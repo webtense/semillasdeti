@@ -92,11 +92,12 @@ El workflow `.github/workflows/deploy.yml` permite construir y desplegar automá
    - Incluí `ops/systemd/semillasdeti.service` con la definición recomendada. Pasos:
      ```bash
      sudo cp ops/systemd/semillasdeti.service /etc/systemd/system/semillasdeti.service
+     sudo useradd --system --home /var/www/semillasdeti --shell /usr/sbin/nologin semillasdeti # si no existe
      sudo systemctl daemon-reload
      sudo systemctl enable semillasdeti
      sudo systemctl start semillasdeti
      ```
-   - Ajusta `PORT` y `User` si lo necesitas. El workflow asume que el servicio existe y se puede reiniciar.
+   - El servicio corre bajo el usuario `semillasdeti`, lee los secretos desde `/etc/semillasdeti.env` (permisos `600`, propietario `semillasdeti`) y escucha únicamente en `172.17.0.1:4173`, accesible desde Traefik. Ajusta `PORT`/`HOST` si tu red o bridge docker cambia.
 
 Con esto, cada push a `main` (o ejecución manual) construirá y publicará la última versión automáticamente.
 
