@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+
+const {
+	title = 'Semillas de Ti | Coaching emocional por Zoraida Pozo Barrio',
+	description = 'Procesos de coaching personal y profesional con un enfoque cálido y práctico para reconectar con tu dirección.',
+	image = '/images/hero.jpg',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={image} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://semillasdeti.com" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={image} />
+	</head>
+	<body class="bg-sand text-cacao antialiased">
+		<slot />
+	</body>
+</html>

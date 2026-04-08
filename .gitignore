@@ -1,0 +1,15 @@
+# General
+.DS_Store
+node_modules/
+dist/
+
+# Astro inside web folder
+web/node_modules/
+web/dist/
+web/.astro/
+
+# Env files
+.env
+.env.local
+web/.env
+web/.env.local

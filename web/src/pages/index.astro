@@ -1,0 +1,394 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const navLinks = [
+	{ label: 'Quién soy', href: '#quien-soy' },
+	{ label: 'Cómo trabajo', href: '#metodo' },
+	{ label: 'Servicios', href: '#servicios' },
+	{ label: 'Testimonios', href: '#testimonios' },
+];
+
+const stats = [
+	{ label: 'Procesos acompañados', value: '+180' },
+	{ label: 'Sesiones online', value: '+950' },
+	{ label: 'Valoración media', value: '4.9/5' },
+];
+
+const process = [
+	{
+		title: 'Exploración consciente',
+		description: 'Sesión inicial para entender dónde estás, qué sientes y qué necesitas priorizar.',
+	},
+	{
+		title: 'Diseño a medida',
+		description: 'Definimos objetivos, rituales y herramientas que puedas integrar en tu rutina real.',
+	},
+	{
+		title: 'Acompañamiento vivo',
+		description: 'Seguimiento honesto, feedback y ajustes constantes para sostener los cambios en el tiempo.',
+	},
+];
+
+const services = [
+	{
+		title: 'Coaching Personal',
+		description:
+			'Navega transiciones vitales, decisiones importantes y bloqueos emocionales con claridad y autocuidado.',
+		benefits: ['Sesiones 1:1 online o presenciales', 'Bitácora entre sesiones', 'Recap con próximos pasos'],
+	},
+	{
+		title: 'Coaching Emocional',
+		description:
+			'Herramientas prácticas para calmar la mente, regular emociones intensas y crear nuevas narrativas sobre ti.',
+		benefits: ['Mapeo de disparadores emocionales', 'Ejercicios somáticos y cognitivos', 'Plan de apoyo semanal'],
+	},
+	{
+		title: 'Coaching Profesional',
+		description:
+			'Dirige tu carrera desde un lugar auténtico: liderazgo consciente, comunicación y límites sanos.',
+		benefits: ['Evaluación de fortalezas', 'Plan de acción trimestral', 'Sesiones de feedback en vivo'],
+	},
+];
+
+const testimonials = [
+	{
+		name: 'Marina Coll',
+		role: 'Product Manager',
+		quote:
+			'Llegué en pleno bloqueo profesional. Zoraida me ayudó a revisar mis creencias y a tomar decisiones desde la calma. Tres meses después cambio de rol con mucha más seguridad.',
+	},
+	{
+		name: 'Rocío Lamas',
+		role: 'Emprendedora',
+		quote:
+			'No es sólo coaching, es un espacio súper humano. El método de Zoraida mezcla escucha profunda y acciones concretas. Hoy disfruto de mi negocio sin sentir que me pierdo a mí misma.',
+	},
+	{
+		name: 'Hugo Vidal',
+		role: 'Director de operaciones',
+		quote:
+			'Trabajamos mi liderazgo y la ansiedad que arrastraba desde hacía años. Implementamos rituales sencillos y conversaciones clave con mi equipo. El impacto es brutal.',
+	},
+];
+
+const whatsappNumber = '34665694516';
+const defaultWhatsappMessage =
+	import.meta.env.PUBLIC_WHATSAPP_MESSAGE ||
+	'Hola Zoraida, me gustaría reservar una llamada para conocerte mejor.';
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultWhatsappMessage)}`;
+
+const brevoFormAction = import.meta.env.PUBLIC_BREVO_FORM_ACTION || '';
+const brevoListId = import.meta.env.PUBLIC_BREVO_LIST_ID || '';
+const newsletterDisabled = !brevoFormAction || !brevoListId;
+const currentYear = new Date().getFullYear();
+---
+
+<Layout>
+	<header class="sticky top-0 z-30 bg-sand/95 backdrop-blur-md border-b border-clay/60">
+		<div class="section-shell flex items-center justify-between py-4">
+			<div>
+				<p class="tagline text-sienna tracking-[0.3em] text-xs">Semillas de Ti</p>
+				<p class="text-sm text-cacao/70">Coaching por Zoraida Pozo Barrio</p>
+			</div>
+			<nav class="hidden md:flex items-center gap-6 text-sm">
+				{navLinks.map((link) => (
+					<a class="text-cacao/80 hover:text-sienna transition-colors" href={link.href}
+						>{link.label}</a
+					>
+				))}
+			</nav>
+			<a
+				href="#contacto"
+				class="hidden md:inline-flex items-center gap-2 rounded-full bg-sienna text-white px-5 py-2 text-sm shadow-soft"
+			>
+				Reserva una llamada
+			</a>
+		</div>
+	</header>
+
+	<main>
+		<section class="section-shell grid gap-10 py-20 items-center lg:grid-cols-[1.1fr_0.9fr]">
+			<div>
+				<p class="tagline text-sienna/80">Coaching emocional & profesional</p>
+				<h1 class="text-4xl sm:text-5xl font-serif text-cacao leading-tight mt-4">
+					Cultiva decisiones más conscientes y una vida con dirección propia.
+				</h1>
+				<p class="text-lg text-cacao/80 mt-5 max-w-xl">
+					Soy Zoraida Pozo Barrio y acompaño a mujeres y equipos a reconectar con su voz interior,
+					a regular lo que sienten y a sostener cambios reales con mucha humanidad y estrategia.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 mt-8">
+					<a
+						href="#contacto"
+						class="inline-flex items-center justify-center rounded-full bg-sienna text-white px-7 py-3 font-medium shadow-soft"
+					>
+						Reserva una llamada
+					</a>
+					<a
+						href={whatsappLink}
+						class="inline-flex items-center justify-center rounded-full border border-sienna/40 px-7 py-3 font-medium text-sienna"
+						target="_blank"
+						rel="noreferrer"
+					>
+						Habla por WhatsApp
+					</a>
+				</div>
+				<div class="mt-10 grid gap-6 sm:grid-cols-3">
+					{stats.map((item) => (
+						<div class="soft-card rounded-2xl p-4 text-center">
+							<p class="text-3xl font-serif text-sienna">{item.value}</p>
+							<p class="text-sm text-cacao/70">{item.label}</p>
+						</div>
+					))}
+				</div>
+			</div>
+			<div class="relative">
+				<div class="rounded-[32px] overflow-hidden shadow-soft border border-white/60">
+					<img src="/images/hero.jpg" alt="Sesión de coaching Semillas de Ti" class="w-full h-full object-cover" />
+				</div>
+				<div class="absolute -bottom-6 left-6 bg-white rounded-2xl shadow-soft p-5 max-w-xs">
+					<p class="text-sm text-cacao/70">Procesos guiados</p>
+					<p class="text-2xl font-serif text-sienna">Con presencia, ciencia y sensibilidad.</p>
+				</div>
+			</div>
+		</section>
+
+		<section id="quien-soy" class="py-20 bg-white/70">
+			<div class="section-shell grid gap-12 lg:grid-cols-2 items-center">
+				<div class="order-2 lg:order-1">
+					<p class="tagline text-sienna/80">Quién está detrás</p>
+					<h2 class="text-3xl font-serif text-cacao mt-4">Hola, soy Zoraida</h2>
+					<p class="text-lg text-cacao/80 mt-4">
+						Coach certificada, facilitadora de procesos emocionales y eterna aprendiz. Después de 15 años en el
+						mundo corporativo decidí crear Semillas de Ti para acompañar con más cercanía y autenticidad.
+					</p>
+					<ul class="mt-6 space-y-3 text-cacao/80">
+						<li>✔ Formación en Coaching Estratégico, Terapia Breve e Inteligencia Emocional</li>
+						<li>✔ Sesiones online y en Madrid / Barcelona</li>
+						<li>✔ Metodología híbrida: introspección + acciones muy concretas</li>
+					</ul>
+					<p class="mt-6 text-cacao/70">
+						Trabajo desde la escucha activa, preguntas que te devuelven tu poder y herramientas que puedes aplicar la
+						misma semana. Sin juicios. Sin promesas imposibles.
+					</p>
+				</div>
+				<div class="order-1 lg:order-2">
+					<div class="soft-card rounded-[32px] p-10">
+						<p class="text-sm uppercase tracking-[0.4em] text-sienna/80">Valores</p>
+						<ul class="mt-6 space-y-5">
+							<li>
+								<p class="font-serif text-xl text-cacao">Presencia</p>
+								<p class="text-cacao/70">Estar contigo en cada etapa, no sólo durante la sesión.</p>
+							</li>
+							<li>
+								<p class="font-serif text-xl text-cacao">Claridad</p>
+								<p class="text-cacao/70">Nombrar lo que duele para liberar energía hacia lo que deseas.</p>
+							</li>
+							<li>
+								<p class="font-serif text-xl text-cacao">Acción amable</p>
+								<p class="text-cacao/70">Pequeños compromisos que se sienten posibles y sostenibles.</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="metodo" class="py-20">
+			<div class="section-shell">
+				<p class="tagline text-sienna/80">Cómo trabajo</p>
+				<h2 class="text-3xl font-serif text-cacao mt-4 max-w-3xl">
+					Un método vivo que mezcla enfoque estratégico y calidez humana.
+				</h2>
+				<div class="mt-10 grid gap-6 md:grid-cols-3">
+					{process.map((step, index) => (
+						<div class="soft-card rounded-3xl p-6 flex flex-col gap-4">
+							<div class="w-12 h-12 rounded-full bg-clay flex items-center justify-center text-cacao font-semibold">
+								{index + 1}
+							</div>
+							<h3 class="text-xl font-serif text-cacao">{step.title}</h3>
+							<p class="text-cacao/70">{step.description}</p>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="servicios" class="py-20 bg-white/80">
+			<div class="section-shell">
+				<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+					<div>
+						<p class="tagline text-sienna/80">Servicios</p>
+						<h2 class="text-3xl font-serif text-cacao mt-4">Elige el acompañamiento que necesitas</h2>
+					</div>
+					<p class="text-cacao/70 max-w-lg">
+						Cada proceso se diseña contigo. Puedo combinar sesiones online, presenciales y espacios
+						dedicados a tu equipo si lo necesitas.
+					</p>
+				</div>
+				<div class="mt-10 grid gap-8 lg:grid-cols-3">
+					{services.map((service) => (
+						<article class="soft-card rounded-[28px] p-8 flex flex-col gap-4">
+							<h3 class="text-2xl font-serif text-cacao">{service.title}</h3>
+							<p class="text-cacao/70">{service.description}</p>
+							<ul class="mt-4 space-y-2 text-cacao/80">
+								{service.benefits.map((benefit) => (
+									<li>• {benefit}</li>
+								))}
+							</ul>
+							<div class="mt-auto pt-6">
+								<a href="#contacto" class="text-sienna font-semibold">Quiero este proceso →</a>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="testimonios" class="py-20">
+			<div class="section-shell">
+				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+					<div>
+						<p class="tagline text-sienna/80">Testimonios reales</p>
+						<h2 class="text-3xl font-serif text-cacao mt-4">Lo que dicen las personas que acompaño</h2>
+					</div>
+					<p class="text-cacao/70 max-w-2xl">
+						Cada historia es diferente, pero todas coinciden en algo: cuando te escuchas y cuentas con soporte, la
+						coherencia llega.
+					</p>
+				</div>
+				<div class="mt-10 grid gap-6 lg:grid-cols-3">
+					{testimonials.map((testimonial) => (
+						<figure class="soft-card rounded-[28px] p-7 flex flex-col gap-4">
+							<blockquote class="text-cacao/80">“{testimonial.quote}”</blockquote>
+							<figcaption>
+								<p class="font-semibold text-cacao">{testimonial.name}</p>
+								<p class="text-sm text-cacao/60">{testimonial.role}</p>
+							</figcaption>
+						</figure>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section id="newsletter" class="py-20 bg-white/90">
+			<div class="section-shell grid gap-10 lg:grid-cols-2 items-center">
+				<div class="rounded-[32px] overflow-hidden shadow-soft">
+					<img src="/images/newsletter.jpg" alt="Mujer escribiendo en cuaderno" class="w-full h-full object-cover" loading="lazy" />
+				</div>
+				<div>
+					<p class="tagline text-sienna/80">Newsletter cálida</p>
+					<h2 class="text-3xl font-serif text-cacao mt-4">Recibe la guía “5 anclas para volver a ti”.</h2>
+					<p class="text-cacao/70 mt-4">
+						Historias reales, ejercicios breves y recordatorios para reconectar contigo. Un correo a la semana,
+						sin ruido.
+					</p>
+					<form
+						class={`mt-6 space-y-4 ${newsletterDisabled ? 'opacity-70 pointer-events-none' : ''}`}
+						action={newsletterDisabled ? undefined : brevoFormAction}
+						method="post"
+						target="_blank"
+						rel="noreferrer"
+					>
+						<input type="hidden" name="listid" value={brevoListId} />
+						<div>
+							<label class="text-sm text-cacao/70">Nombre</label>
+							<input
+								type="text"
+								name="FIRSTNAME"
+								required
+								placeholder="Tu nombre"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
+							/>
+						</div>
+						<div>
+							<label class="text-sm text-cacao/70">Correo</label>
+							<input
+								type="email"
+								name="EMAIL"
+								required
+								placeholder="tu@email.com"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
+							/>
+						</div>
+						<label class="flex items-start gap-3 text-sm text-cacao/70">
+							<input type="checkbox" required class="mt-1" />Acepto recibir comunicaciones de Semillas de Ti.
+						</label>
+						<button type="submit" class="w-full rounded-full bg-sienna text-white py-3 font-medium">
+							Quiero la guía
+						</button>
+					</form>
+					{newsletterDisabled && (
+						<p class="text-xs text-cacao/60 mt-3">
+							⚠️ Conecta tu formulario de Brevo añadiendo PUBLIC_BREVO_FORM_ACTION y PUBLIC_BREVO_LIST_ID en el
+							`.env`.
+						</p>
+					)}
+				</div>
+			</div>
+		</section>
+
+		<section id="contacto" class="py-20">
+			<div class="section-shell grid gap-10 lg:grid-cols-[1fr_0.9fr] items-center">
+				<div>
+					<p class="tagline text-sienna/80">Contacto</p>
+					<h2 class="text-3xl font-serif text-cacao mt-4">¿Reservamos una llamada exploratoria?</h2>
+					<p class="text-cacao/70 mt-4">
+						Sesión de 25 minutos para conocernos, revisar tus necesidades y ver si tiene sentido acompañarte.
+					</p>
+					<ul class="mt-8 space-y-4 text-cacao/80">
+						<li><span class="font-semibold">WhatsApp:</span> <a class="text-sienna" href={whatsappLink} target="_blank" rel="noreferrer">+34 665 694 516</a></li>
+						<li><span class="font-semibold">Email:</span> <a class="text-sienna" href="mailto:zoraidapozobarrio@gmail.com">zoraidapozobarrio@gmail.com</a></li>
+						<li><span class="font-semibold">Modalidad:</span> Online / Presencial (Madrid y Barcelona)</li>
+					</ul>
+				</div>
+				<div class="soft-card rounded-[32px] p-8 space-y-4">
+					<div>
+						<label class="text-sm text-cacao/70">Nombre</label>
+						<input type="text" placeholder="Tu nombre" class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3" />
+					</div>
+					<div>
+						<label class="text-sm text-cacao/70">Email</label>
+						<input type="email" placeholder="tu@email.com" class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3" />
+					</div>
+					<div>
+						<label class="text-sm text-cacao/70">¿Qué te gustaría trabajar?</label>
+						<textarea rows="4" placeholder="Cuéntame brevemente" class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"></textarea>
+					</div>
+					<p class="text-xs text-cacao/60">Este formulario es orientativo. Haz clic abajo para enviarme un correo con tu mensaje.</p>
+					<a
+						href="mailto:zoraidapozobarrio@gmail.com?subject=Quiero%20reservar%20una%20llamada"
+						class="block text-center rounded-full bg-sienna text-white py-3 font-medium"
+					>
+						Enviar mensaje
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="bg-cacao text-sand py-12">
+		<div class="section-shell flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<p class="font-serif text-2xl">Semillas de Ti</p>
+				<p class="text-sm text-sand/80">Coaching emocional y profesional por Zoraida Pozo Barrio.</p>
+			</div>
+			<div class="text-sm space-y-1">
+				<p>Email: <a class="text-white" href="mailto:zoraidapozobarrio@gmail.com">zoraidapozobarrio@gmail.com</a></p>
+				<p>WhatsApp: <a class="text-white" href={whatsappLink} target="_blank" rel="noreferrer">+34 665 694 516</a></p>
+			</div>
+		</div>
+		<div class="section-shell text-xs text-sand/60 mt-6">
+			<p>© {currentYear} Semillas de Ti. Todos los derechos reservados.</p>
+		</div>
+	</footer>
+
+	<a
+		href={whatsappLink}
+		class="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-sage text-white px-4 py-3 shadow-soft"
+		target="_blank"
+		rel="noreferrer"
+	>
+		<span class="text-sm font-semibold">WhatsApp</span>
+	</a>
+</Layout>

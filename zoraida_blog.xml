@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+    xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.2/">
+
+<channel>
+    <title>Semillas de Ti</title>
+    <link>https://semillasdeti.com</link>
+    <description>Blog de Coaching emocional con Zoraida</description>
+    <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+    <language>es-ES</language>
+    <wp:wxr_version>1.2</wp:wxr_version>
+    <wp:base_site_url>https://semillasdeti.com</wp:base_site_url>
+    <wp:base_blog_url>https://semillasdeti.com</wp:base_blog_url>
+
+    <wp:author>
+        <wp:author_id>1</wp:author_id>
+        <wp:author_login>zoraida</wp:author_login>
+        <wp:author_email>zoraidapozobarrio@gmail.com</wp:author_email>
+        <wp:author_display_name><![CDATA[Zoraida Pozo Barrio]]></wp:author_display_name>
+    </wp:author>
+
+    
+    <item>
+        <title><![CDATA[¿Qué es el coaching emocional y cómo puede ayudarte?]]></title>
+        <link>https://semillasdeti.com/coaching-emocional/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?p=100</guid>
+        <description><![CDATA[Descubre en qué consiste el coaching emocional y cómo puede impactar tu bienestar.]]></description>
+        <content:encoded><![CDATA[
+<h1>¿Qué es el coaching emocional y cómo puede ayudarte?</h1>
+<p>Hola, soy Zoraida Pozo Barrio, y quiero hablarte de algo que ha transformado mi vida: el <strong>coaching emocional</strong>.</p>
+<p>El coaching emocional es un proceso de acompañamiento que te ayuda a <strong>conectar con tus emociones</strong>, entenderlas y aprender a gestionarlas. No se trata de terapia psicológica, sino de un espacio para que tomes conciencia, actúes y avances hacia tus objetivos.</p>
+<p>He trabajado con muchas personas que se sentían bloqueadas, frustradas o desconectadas de sí mismas. A través del coaching, han descubierto herramientas para volver a su centro, establecer límites, tomar decisiones alineadas y recuperar su poder personal.</p>
+<p>Mi objetivo como coach es ayudarte a que tú también lo logres. ¿Hablamos?</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Descubre en qué consiste el coaching emocional y cómo puede impactar tu bienestar.]]></excerpt:encoded>
+        <wp:post_id>100</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[open]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[coaching-emocional]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[post]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[5 señales de que necesitas una sesión de coaching]]></title>
+        <link>https://semillasdeti.com/senales-coaching/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?p=101</guid>
+        <description><![CDATA[¿Dudas si el coaching es para ti? Aquí te doy 5 señales claras.]]></description>
+        <content:encoded><![CDATA[
+<h1>5 señales de que necesitas una sesión de coaching</h1>
+<p>¿Alguna vez has sentido que estás estancada o repites patrones que te desgastan? Estas son 5 señales que suelo ver en mis sesiones, y que indican que el coaching podría ayudarte:</p>
+<ol>
+<li><strong>Sientes que vives en piloto automático</strong> y no sabes bien hacia dónde vas.</li>
+<li><strong>Te cuesta tomar decisiones</strong> importantes, por miedo a equivocarte.</li>
+<li><strong>Te exiges demasiado</strong> y rara vez te reconoces o celebras.</li>
+<li><strong>Estás en una etapa de cambio</strong> (nuevo trabajo, maternidad, ruptura, etc.).</li>
+<li><strong>Deseas conocerte mejor</strong> y tener más claridad emocional.</li>
+</ol>
+<p>Si te sentiste identificada con alguna, no estás sola. El coaching te puede ayudar a reconectar contigo misma y a recuperar el rumbo.</p>
+<p>Te acompaño en ese proceso, con empatía y sin juicios.</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[¿Dudas si el coaching es para ti? Aquí te doy 5 señales claras.]]></excerpt:encoded>
+        <wp:post_id>101</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[open]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[senales-coaching]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[post]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[Mini reto: 5 días para reconectar contigo]]></title>
+        <link>https://semillasdeti.com/reto-5-dias/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?p=102</guid>
+        <description><![CDATA[Un reto gratuito de 5 días para reencontrarte contigo misma, paso a paso.]]></description>
+        <content:encoded><![CDATA[
+<h1>Mini reto: 5 días para reconectar contigo</h1>
+<p>Te propongo un pequeño reto de 5 días. Cada día te invito a hacer una práctica sencilla para reconectar contigo:</p>
+<ul>
+<li><strong>Día 1:</strong> Escribe 3 cosas por las que agradeces hoy.</li>
+<li><strong>Día 2:</strong> Dedica 10 minutos a estar en silencio, sin distracciones.</li>
+<li><strong>Día 3:</strong> Pregúntate: “¿Qué necesito hoy de mí?” y respóndetelo sin juicio.</li>
+<li><strong>Día 4:</strong> Haz una actividad que te nutra (pasear, leer, estirarte…)</li>
+<li><strong>Día 5:</strong> Mírate al espejo y di en voz alta: “Estoy aquí para mí”.</li>
+</ul>
+<p>Este pequeño gesto diario puede ayudarte a reconectar y recordar que tú eres tu prioridad.</p>
+<p>¿Te animas a hacerlo? Escríbeme si quieres compartir cómo te fue 💌</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Un reto gratuito de 5 días para reencontrarte contigo misma, paso a paso.]]></excerpt:encoded>
+        <wp:post_id>102</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[open]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[reto-5-dias]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[post]]></wp:post_type>
+    </item>
+    
+
+</channel>
+</rss>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+    xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.2/">
+
+<channel>
+    <title>Semillas de Ti</title>
+    <link>https://semillasdeti.com</link>
+    <description>Coaching emocional con Zoraida Pozo Barrio</description>
+    <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+    <language>es-ES</language>
+    <wp:wxr_version>1.2</wp:wxr_version>
+    <wp:base_site_url>https://semillasdeti.com</wp:base_site_url>
+    <wp:base_blog_url>https://semillasdeti.com</wp:base_blog_url>
+
+    <wp:author>
+        <wp:author_id>1</wp:author_id>
+        <wp:author_login>zoraida</wp:author_login>
+        <wp:author_email>zoraidapozobarrio@gmail.com</wp:author_email>
+        <wp:author_display_name><![CDATA[Zoraida Pozo Barrio]]></wp:author_display_name>
+    </wp:author>
+
+    
+    <item>
+        <title><![CDATA[Inicio]]></title>
+        <link>https://semillasdeti.com/inicio/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?page_id=1</guid>
+        <description><![CDATA[Página de bienvenida]]></description>
+        <content:encoded><![CDATA[
+<h1>Bienvenida a tu transformación</h1>
+<p><strong>Zoraida Pozo Barrio</strong> te acompaña en tu camino de desarrollo emocional y personal.</p>
+<p>Descubre una nueva versión de ti misma con sesiones de coaching personalizadas.</p>
+<ul>
+<li><strong>🎯 Sesiones 1:1</strong> – Presenciales y online</li>
+<li><strong>💡 Frases que inspiran</strong> – Cada semana un nuevo impulso</li>
+<li><strong>📘 Blog</strong> – Aprende, reflexiona y crece</li>
+</ul>
+<p><a href="#reserva">Reserva tu sesión</a> o <a href="#blog">lee nuestro blog</a>.</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Coaching personalizado para tu bienestar.]]></excerpt:encoded>
+        <wp:post_id>1</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[inicio]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[Sobre mí]]></title>
+        <link>https://semillasdeti.com/sobre-mi/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?page_id=2</guid>
+        <description><![CDATA[Descubre quién es Zoraida Pozo Barrio]]></description>
+        <content:encoded><![CDATA[
+<h1>Sobre mí</h1>
+<p>Soy <strong>Zoraida Pozo Barrio</strong>, coach emocional certificada con formación en psicología y coaching. Tras más de 15 años de experiencia profesional en el ámbito financiero, decidí dedicarme a acompañar a las personas en sus procesos de transformación personal.</p>
+<p>Me defino como una persona empática, resolutiva y comunicadora. Disfruto generando sinergias humanas y ayudando a otras personas a conectar con su propósito.</p>
+<p>Mi enfoque combina escucha activa, técnicas cognitivo-emocionales y una visión holística del desarrollo humano.</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Coach emocional y acompañante en tu camino personal.]]></excerpt:encoded>
+        <wp:post_id>2</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[sobre-mi]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[Servicios]]></title>
+        <link>https://semillasdeti.com/servicios/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?page_id=3</guid>
+        <description><![CDATA[Sesiones de coaching disponibles]]></description>
+        <content:encoded><![CDATA[
+<h1>Servicios</h1>
+<p>Ofrezco <strong>sesiones de coaching 1:1</strong> tanto presenciales como online. Adaptadas a tus necesidades, centradas en ayudarte a desbloquear tu potencial.</p>
+<ul>
+<li>💬 <strong>Coaching Emocional Personalizado</strong>: Desde 25€ a 300€</li>
+<li>📅 <strong>Reserva directa</strong>: a través de Google Calendar (próximamente integrado)</li>
+<li>🌍 <strong>Sesiones Online</strong>: Comodidad desde cualquier parte del mundo</li>
+</ul>
+<p>Contáctame para crear juntas tu plan de transformación.</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Explora las formas en que puedes trabajar conmigo.]]></excerpt:encoded>
+        <wp:post_id>3</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[servicios]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[Testimonios]]></title>
+        <link>https://semillasdeti.com/testimonios/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?page_id=4</guid>
+        <description><![CDATA[Lo que opinan mis clientes]]></description>
+        <content:encoded><![CDATA[
+<h1>Testimonios</h1>
+<blockquote><p>"Gracias a Zoraida recuperé mi seguridad y claridad. Es una guía excepcional." – Ana G.</p></blockquote>
+<blockquote><p>"Una experiencia humana y profesional brutal. Me sentí escuchada como nunca." – Carla M.</p></blockquote>
+<blockquote><p>"Me ayudó a gestionar mejor mis emociones y a tomar decisiones importantes." – Raúl T.</p></blockquote>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Experiencias reales de transformación]]></excerpt:encoded>
+        <wp:post_id>4</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[testimonios]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+    </item>
+    
+    <item>
+        <title><![CDATA[Contacto]]></title>
+        <link>https://semillasdeti.com/contacto/</link>
+        <pubDate>Thu, 05 Jun 2025 05:35:54 +0000</pubDate>
+        <dc:creator><![CDATA[Zoraida Pozo Barrio]]></dc:creator>
+        <guid isPermaLink="false">https://semillasdeti.com/?page_id=5</guid>
+        <description><![CDATA[Contáctame para iniciar tu proceso]]></description>
+        <content:encoded><![CDATA[
+<h1>Contacto</h1>
+<p>¿Tienes preguntas o quieres reservar una sesión?</p>
+<ul>
+<li>📞 <strong>Teléfono</strong>: 665 694 516</li>
+<li>📧 <strong>Email</strong>: <a href="mailto:zoraidapozobarrio@gmail.com">zoraidapozobarrio@gmail.com</a></li>
+</ul>
+<p>También puedes rellenar el formulario de contacto en esta página. ¡Estoy aquí para ayudarte!</p>
+]]></content:encoded>
+        <excerpt:encoded><![CDATA[Reserva una sesión o hazme una consulta.]]></excerpt:encoded>
+        <wp:post_id>5</wp:post_id>
+        <wp:post_date><![CDATA[2025-06-04 08:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2025-06-04 06:00:00]]></wp:post_date_gmt>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[contacto]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+    </item>
+    
+
+</channel>
+</rss>
