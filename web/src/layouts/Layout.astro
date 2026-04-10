@@ -5,7 +5,14 @@ const {
 	title = 'Semillas de Ti | Coaching emocional por Zoraida Pozo Barrio',
 	description = 'Procesos de coaching personal y profesional con un enfoque cálido y práctico para reconectar con tu dirección.',
 	image = '/images/hero.jpg',
+	noindex = false,
+	structuredData,
 } = Astro.props;
+
+const siteUrl = Astro.site?.toString() || 'https://semillasdeti.com';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
+const imageUrl = typeof image === 'string' && image.startsWith('http') ? image : new URL(image, siteUrl).toString();
+const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 ---
 
 <!doctype html>
@@ -22,17 +29,27 @@ const {
 			rel="stylesheet"
 		/>
 		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalUrl} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
+		<meta name="robots" content={robots} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={image} />
+		<meta property="og:image" content={imageUrl} />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://semillasdeti.com" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:site_name" content="Semillas de Ti" />
+		<meta property="og:locale" content="es_ES" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={image} />
+		<meta name="twitter:image" content={imageUrl} />
+		{import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION && (
+			<meta name="google-site-verification" content={import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION} />
+		)}
+		{structuredData && (
+			<script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+		)}
 	</head>
 	<body class="bg-sand text-cacao antialiased">
 		<slot />

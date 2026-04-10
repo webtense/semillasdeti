@@ -1,0 +1,172 @@
+{
+  "brand": {
+    "name": "Semillas de Ti",
+    "subtitle": "Coaching por Zoraida Pozo Barrio"
+  },
+  "navLinks": [
+    {
+      "label": "Quién soy",
+      "href": "#quien-soy"
+    },
+    {
+      "label": "Cómo trabajo",
+      "href": "#metodo"
+    },
+    {
+      "label": "Servicios",
+      "href": "#servicios"
+    },
+    {
+      "label": "Testimonios",
+      "href": "#testimonios"
+    }
+  ],
+  "hero": {
+    "tagline": "Coaching emocional & profesional",
+    "title": "Cultiva decisiones más conscientes y una vida con dirección propia.",
+    "description": "Soy Zoraida Pozo Barrio y acompaño a mujeres y equipos a reconectar con su voz interior, a regular lo que sienten y a sostener cambios reales con mucha humanidad y estrategia.",
+    "primaryCta": "Reserva una llamada",
+    "secondaryCta": "Habla por WhatsApp",
+    "image": "/images/hero.jpg",
+    "imageAlt": "Sesión de coaching Semillas de Ti",
+    "badgeTitle": "Procesos guiados",
+    "badgeText": "Con presencia, ciencia y sensibilidad."
+  },
+  "stats": [
+    {
+      "label": "Procesos acompañados",
+      "value": "+180"
+    },
+    {
+      "label": "Sesiones online",
+      "value": "+950"
+    },
+    {
+      "label": "Valoración media",
+      "value": "4.9/5"
+    }
+  ],
+  "about": {
+    "tagline": "Quién está detrás",
+    "title": "Hola, soy Zoraida",
+    "description": "Coach certificada, facilitadora de procesos emocionales y eterna aprendiz. Después de 15 años en el mundo corporativo decidí crear Semillas de Ti para acompañar con más cercanía y autenticidad.",
+    "bullets": [
+      "Formación en Coaching Estratégico, Terapia Breve e Inteligencia Emocional",
+      "Sesiones online y en Madrid / Barcelona",
+      "Metodología híbrida: introspección + acciones muy concretas"
+    ],
+    "closing": "Trabajo desde la escucha activa, preguntas que te devuelven tu poder y herramientas que puedes aplicar la misma semana. Sin juicios. Sin promesas imposibles.",
+    "valuesTitle": "Valores",
+    "values": [
+      {
+        "title": "Presencia",
+        "description": "Estar contigo en cada etapa, no sólo durante la sesión."
+      },
+      {
+        "title": "Claridad",
+        "description": "Nombrar lo que duele para liberar energía hacia lo que deseas."
+      },
+      {
+        "title": "Acción amable",
+        "description": "Pequeños compromisos que se sienten posibles y sostenibles."
+      }
+    ]
+  },
+  "method": {
+    "tagline": "Cómo trabajo",
+    "title": "Un método vivo que mezcla enfoque estratégico y calidez humana.",
+    "steps": [
+      {
+        "title": "Exploración consciente",
+        "description": "Sesión inicial para entender dónde estás, qué sientes y qué necesitas priorizar."
+      },
+      {
+        "title": "Diseño a medida",
+        "description": "Definimos objetivos, rituales y herramientas que puedas integrar en tu rutina real."
+      },
+      {
+        "title": "Acompañamiento vivo",
+        "description": "Seguimiento honesto, feedback y ajustes constantes para sostener los cambios en el tiempo."
+      }
+    ]
+  },
+  "services": {
+    "tagline": "Servicios",
+    "title": "Elige el acompañamiento que necesitas",
+    "description": "Cada proceso se diseña contigo. Puedo combinar sesiones online, presenciales y espacios dedicados a tu equipo si lo necesitas.",
+    "items": [
+      {
+        "title": "Coaching Personal",
+        "description": "Navega transiciones vitales, decisiones importantes y bloqueos emocionales con claridad y autocuidado.",
+        "benefits": [
+          "Sesiones 1:1 online o presenciales",
+          "Bitácora entre sesiones",
+          "Recap con próximos pasos"
+        ]
+      },
+      {
+        "title": "Coaching Emocional",
+        "description": "Herramientas prácticas para calmar la mente, regular emociones intensas y crear nuevas narrativas sobre ti.",
+        "benefits": [
+          "Mapeo de disparadores emocionales",
+          "Ejercicios somáticos y cognitivos",
+          "Plan de apoyo semanal"
+        ]
+      },
+      {
+        "title": "Coaching Profesional",
+        "description": "Dirige tu carrera desde un lugar auténtico: liderazgo consciente, comunicación y límites sanos.",
+        "benefits": [
+          "Evaluación de fortalezas",
+          "Plan de acción trimestral",
+          "Sesiones de feedback en vivo"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "tagline": "Testimonios reales",
+    "title": "Lo que dicen las personas que acompaño",
+    "description": "Cada historia es diferente, pero todas coinciden en algo: cuando te escuchas y cuentas con soporte, la coherencia llega.",
+    "items": [
+      {
+        "name": "Marina Coll",
+        "role": "Product Manager",
+        "quote": "Llegué en pleno bloqueo profesional. Zoraida me ayudó a revisar mis creencias y a tomar decisiones desde la calma. Tres meses después cambio de rol con mucha más seguridad."
+      },
+      {
+        "name": "Rocío Lamas",
+        "role": "Emprendedora",
+        "quote": "No es sólo coaching, es un espacio súper humano. El método de Zoraida mezcla escucha profunda y acciones concretas. Hoy disfruto de mi negocio sin sentir que me pierdo a mí misma."
+      },
+      {
+        "name": "Hugo Vidal",
+        "role": "Director de operaciones",
+        "quote": "Trabajamos mi liderazgo y la ansiedad que arrastraba desde hacía años. Implementamos rituales sencillos y conversaciones clave con mi equipo. El impacto es brutal."
+      }
+    ]
+  },
+  "newsletter": {
+    "tagline": "Newsletter cálida",
+    "title": "Recibe la guía “5 anclas para volver a ti”.",
+    "description": "Historias reales, ejercicios breves y recordatorios para reconectar contigo. Un correo a la semana, sin ruido.",
+    "image": "/images/newsletter.jpg",
+    "imageAlt": "Mujer escribiendo en cuaderno",
+    "cta": "Quiero la guía"
+  },
+  "contact": {
+    "tagline": "Contacto",
+    "title": "¿Reservamos una llamada exploratoria?",
+    "description": "Sesión de 25 minutos para conocernos, revisar tus necesidades y ver si tiene sentido acompañarte.",
+    "whatsappNumber": "+34 665 694 516",
+    "whatsappLabel": "WhatsApp",
+    "email": "zoraidapozobarrio@gmail.com",
+    "mode": "Online / Presencial (Madrid y Barcelona)",
+    "formDisclaimer": "Este formulario es orientativo. Haz clic abajo para enviarme un correo con tu mensaje.",
+    "formCta": "Enviar mensaje",
+    "mailtoSubject": "Quiero reservar una llamada"
+  },
+  "footer": {
+    "description": "Coaching emocional y profesional por Zoraida Pozo Barrio."
+  }
+}

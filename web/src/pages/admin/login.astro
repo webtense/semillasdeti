@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { SESSION_COOKIE_NAME, verifySessionToken } from '../../lib/auth';
+
+export const prerender = false;
+
+const token = Astro.cookies.get(SESSION_COOKIE_NAME)?.value;
+if (verifySessionToken(token)) {
+	return Astro.redirect('/admin');
+}
+
+const reason = Astro.url.searchParams.get('reason') ?? '';
+const messageMap: Record<string, string> = {
+	invalid: 'Credenciales incorrectas. Intenta de nuevo.',
+	limited: 'Demasiados intentos. Espera unos minutos antes de volver a intentar.',
+	loggedout: 'Sesión cerrada correctamente.',
+};
+const message = messageMap[reason] ?? '';
+const isError = reason === 'invalid' || reason === 'limited';
+---
+
+<Layout title="Acceso admin | Semillas de Ti" description="Acceso al panel de administración de Semillas de Ti." noindex={true}>
+	<main class="min-h-screen flex items-center justify-center px-6 py-16">
+		<section class="soft-card rounded-[28px] w-full max-w-md p-8">
+			<p class="tagline text-sienna/80">Administración</p>
+			<h1 class="text-3xl font-serif text-cacao mt-4">Accede al panel</h1>
+			<p class="text-cacao/70 mt-3">Usa tus credenciales para editar el contenido principal del sitio.</p>
+
+			{message && (
+				<p class={`mt-4 rounded-xl px-4 py-3 text-sm ${isError ? 'bg-sienna/10 text-sienna' : 'bg-sage/10 text-sage'}`}>
+					{message}
+				</p>
+			)}
+
+			<form action="/api/admin/login" method="post" class="mt-6 space-y-4">
+				<div>
+					<label class="text-sm text-cacao/70" for="username">Usuario</label>
+					<input
+						id="username"
+						name="username"
+						type="text"
+						autocomplete="username"
+						required
+						class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
+					/>
+				</div>
+				<div>
+					<label class="text-sm text-cacao/70" for="password">Contraseña</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autocomplete="current-password"
+						required
+						class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3"
+					/>
+				</div>
+				<button type="submit" class="w-full rounded-full bg-sienna text-white py-3 font-medium">
+					Entrar al panel
+				</button>
+			</form>
+		</section>
+	</main>
+</Layout>

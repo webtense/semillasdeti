@@ -1,6 +1,6 @@
 # Semillas de Ti – Landing de Coaching
 
-Landing page cálida y moderna para presentar los servicios de coaching de **Zoraida Pozo Barrio**. El sitio está construido con Astro + Tailwind y ahora utiliza el adaptador Node (modo híbrido) para exponer un endpoint propio (`/api/newsletter`) que habla con la API de Brevo.
+Landing page cálida y moderna para presentar los servicios de coaching de **Zoraida Pozo Barrio**. El sitio está construido con Astro + Tailwind y utiliza el adaptador Node para exponer endpoints propios (por ejemplo, `/api/newsletter`) que hablan con la API de Brevo.
 
 ## Estructura del repositorio
 
@@ -27,6 +27,11 @@ npm run dev
 | `PUBLIC_BREVO_LIST_ID` | ID numérico de la lista de Brevo donde guardar los contactos |
 | `PUBLIC_WHATSAPP_MESSAGE` | Mensaje precargado para el CTA de WhatsApp |
 | `BREVO_API_KEY` | API Key (xkeysib-…) para consumir `https://api.brevo.com/v3/contacts` |
+| `PUBLIC_GOOGLE_SITE_VERIFICATION` | Código de verificación para Google Search Console (opcional) |
+| `ADMIN_USERNAME` | Usuario del panel de administración |
+| `ADMIN_PASSWORD` | Contraseña del panel de administración |
+| `ADMIN_SESSION_SECRET` | Secreto de sesión (mínimo 32 caracteres) |
+| `ADMIN_REDEPLOY_COMMAND` | Comando opcional para rebuild manual desde admin |
 
 > El archivo `web/.env.example` trae el formato que debes seguir. Copia el contenido en `web/.env` y actualiza los valores reales.
 
@@ -69,7 +74,8 @@ Puedes personalizar el texto que aparecerá al abrir la conversación modificand
 
 5. **Post-deploy**
    - Verifica `/api/newsletter` con una petición `POST` de prueba.
-   - Comprueba Lighthouse (desktop + mobile) y actualiza Search Console + sitemap (`/sitemap.xml`).
+    - Comprueba Lighthouse (desktop + mobile) y actualiza Search Console + sitemap (`/sitemap.xml`).
+    - Verifica que `/admin` y `/api` no se indexen (X-Robots-Tag + robots).
    - Configura backups y monitorización.
 
 ## Automatización CI/CD (GitHub Actions)

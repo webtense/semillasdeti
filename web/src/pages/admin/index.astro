@@ -1,0 +1,112 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { CSRF_COOKIE_NAME } from '../../lib/auth';
+import { getSiteContent } from '../../lib/content';
+
+export const prerender = false;
+
+const content = await getSiteContent();
+const contentJson = JSON.stringify(content, null, 2);
+const csrfToken = Astro.cookies.get(CSRF_COOKIE_NAME)?.value ?? '';
+const saved = Astro.url.searchParams.get('saved') === '1';
+const uploaded = Astro.url.searchParams.get('uploaded');
+const error = Astro.url.searchParams.get('error') ?? '';
+const rebuild = Astro.url.searchParams.get('rebuild') ?? '';
+
+const errorMap: Record<string, string> = {
+	auth: 'Tu sesión expiró. Vuelve a iniciar sesión.',
+	csrf: 'No se pudo validar la sesión del formulario. Recarga la página e intenta otra vez.',
+	json: 'El JSON no es válido. Revisa el formato antes de guardar.',
+	toolarge: 'El bloque de contenido excede el tamaño permitido.',
+	upload: 'No se pudo subir la imagen. Verifica formato y tamaño.',
+	missing: 'Faltan datos obligatorios en la petición.',
+
+};
+
+const rebuildMap: Record<string, string> = {
+	ok: 'Comando de rebuild ejecutado correctamente.',
+	missing: 'No hay comando de rebuild configurado. Define ADMIN_REDEPLOY_COMMAND en .env.',
+	invalid: 'El comando de rebuild tiene caracteres no permitidos por seguridad.',
+	error: 'El rebuild falló. Revisa logs del servidor.',
+};
+---
+
+<Layout title="Panel admin | Semillas de Ti" description="Panel de administración Semillas de Ti" noindex={true}>
+	<main class="section-shell py-10 md:py-14 space-y-8">
+		<header class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<p class="tagline text-sienna/80">Panel de administración</p>
+				<h1 class="text-3xl font-serif text-cacao mt-3">Editar contenido público</h1>
+				<p class="text-cacao/70 mt-2 max-w-3xl">
+					1) Sube imágenes para obtener rutas listas. 2) Pega o edita el JSON. 3) Guarda cambios.
+				</p>
+			</div>
+			<form method="post" action="/api/admin/logout">
+				<input type="hidden" name="csrfToken" value={csrfToken} />
+				<button class="rounded-full border border-sienna/40 px-5 py-2 text-sienna font-semibold">Cerrar sesión</button>
+			</form>
+		</header>
+
+		{saved && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Contenido guardado correctamente.</p>}
+		{uploaded && (
+			<p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">
+				Imagen subida con éxito: <code>{uploaded}</code>
+			</p>
+		)}
+		{error && errorMap[error] && <p class="rounded-2xl bg-sienna/10 text-sienna px-4 py-3 text-sm">{errorMap[error]}</p>}
+		{rebuild && rebuildMap[rebuild] && (
+			<p class={`rounded-2xl px-4 py-3 text-sm ${rebuild === 'ok' ? 'bg-sage/10 text-sage' : 'bg-sienna/10 text-sienna'}`}>
+				{rebuildMap[rebuild]}
+			</p>
+		)}
+
+		<section class="soft-card rounded-[28px] p-6 md:p-8">
+			<h2 class="text-2xl font-serif text-cacao">Subir imagen</h2>
+			<p class="text-cacao/70 mt-2">
+				Sube JPG, PNG o WEBP (hasta 5MB). Luego usa la ruta en el JSON, por ejemplo <code>/images/uploads/archivo.jpg</code>.
+			</p>
+			<form action="/api/admin/upload" method="post" enctype="multipart/form-data" class="mt-5 flex flex-col gap-4 md:flex-row md:items-end">
+				<input type="hidden" name="csrfToken" value={csrfToken} />
+				<div class="w-full md:max-w-lg">
+					<label class="text-sm text-cacao/70" for="image">Archivo</label>
+					<input id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp" required class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3" />
+				</div>
+				<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Subir</button>
+			</form>
+		</section>
+
+		<section class="soft-card rounded-[28px] p-6 md:p-8">
+			<h2 class="text-2xl font-serif text-cacao">Contenido del sitio (JSON)</h2>
+			<p class="text-cacao/70 mt-2">
+				Puedes editar textos, enlaces e imágenes desde aquí. Conserva la estructura para evitar errores.
+			</p>
+			<form action="/api/admin/content" method="post" class="mt-6 space-y-4">
+				<input type="hidden" name="csrfToken" value={csrfToken} />
+				<label class="sr-only" for="content-json">JSON de contenido</label>
+				<textarea
+					id="content-json"
+					name="content"
+					required
+					class="w-full min-h-[560px] rounded-2xl border border-clay/60 bg-white px-4 py-4 font-mono text-sm leading-6"
+				>{contentJson}</textarea>
+				<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+					<p class="text-sm text-cacao/60">Tip: guarda primero, revisa la portada y luego ajusta detalles finos.</p>
+					<div class="flex gap-3">
+						<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Guardar cambios</button>
+					</div>
+				</div>
+			</form>
+		</section>
+
+		<section class="soft-card rounded-[28px] p-6 md:p-8">
+			<h2 class="text-2xl font-serif text-cacao">Rebuild / Redeploy</h2>
+			<p class="text-cacao/70 mt-2">
+				Si tu despliegue requiere build manual, configura <code>ADMIN_REDEPLOY_COMMAND</code> y ejecútalo desde aquí.
+			</p>
+			<form action="/api/admin/rebuild" method="post" class="mt-5">
+				<input type="hidden" name="csrfToken" value={csrfToken} />
+				<button class="rounded-full border border-sienna/40 px-6 py-3 text-sienna font-semibold" type="submit">Ejecutar rebuild</button>
+			</form>
+		</section>
+	</main>
+</Layout>
