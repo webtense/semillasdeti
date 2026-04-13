@@ -13,3 +13,6 @@ web/.astro/
 .env.local
 web/.env
 web/.env.local
+
+# Deployment artifacts
+*.tar.gz

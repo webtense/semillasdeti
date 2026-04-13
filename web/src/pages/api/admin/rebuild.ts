@@ -23,7 +23,7 @@ export const POST: APIRoute = async (context) => {
 		return context.redirect('/admin?error=csrf', 302);
 	}
 
-	const command = import.meta.env.ADMIN_REDEPLOY_COMMAND;
+	const command = import.meta.env.ADMIN_REDEPLOY_COMMAND || process.env.ADMIN_REDEPLOY_COMMAND;
 	if (!command) {
 		return context.redirect('/admin?rebuild=missing', 302);
 	}

@@ -5,7 +5,7 @@ export const CSRF_COOKIE_NAME = 'sdt_admin_csrf';
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
 
 function getSessionSecret() {
-	const secret = import.meta.env.ADMIN_SESSION_SECRET;
+	const secret = import.meta.env.ADMIN_SESSION_SECRET || process.env.ADMIN_SESSION_SECRET;
 	if (!secret || secret.length < 32) {
 		throw new Error('ADMIN_SESSION_SECRET must be set and have at least 32 characters.');
 	}
@@ -70,8 +70,8 @@ export function createCsrfToken() {
 }
 
 export function getAdminCredentials() {
-	const username = import.meta.env.ADMIN_USERNAME;
-	const password = import.meta.env.ADMIN_PASSWORD;
+	const username = import.meta.env.ADMIN_USERNAME || process.env.ADMIN_USERNAME;
+	const password = import.meta.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
 	if (!username || !password) {
 		throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD are required.');
 	}

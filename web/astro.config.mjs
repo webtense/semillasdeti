@@ -6,4 +6,7 @@ export default defineConfig({
 	site: 'https://semillasdeti.com',
 	output: 'static',
 	adapter: node({ mode: 'standalone' }),
+	security: {
+		checkOrigin: false,
+	},
 });
