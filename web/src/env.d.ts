@@ -10,6 +10,8 @@ interface ImportMetaEnv {
 	readonly ADMIN_PASSWORD?: string;
 	readonly ADMIN_SESSION_SECRET?: string;
 	readonly ADMIN_REDEPLOY_COMMAND?: string;
+	readonly MAILJET_API_KEY?: string;
+	readonly MAILJET_SECRET_KEY?: string;
 }
 
 interface ImportMeta {

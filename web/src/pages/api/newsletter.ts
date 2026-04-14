@@ -27,6 +27,54 @@ function isValidEmail(email: string) {
 	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+async function sendMailjetEmail(toEmail: string, toName: string) {
+	const apiKey = import.meta.env.MAILJET_API_KEY || process.env.MAILJET_API_KEY;
+	const apiSecret = import.meta.env.MAILJET_SECRET_KEY || process.env.MAILJET_SECRET_KEY;
+
+	if (!apiKey || !apiSecret) {
+		throw new Error('Mailjet credentials not configured');
+	}
+
+	const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64');
+
+	const payload = {
+		Messages: [
+			{
+				From: {
+					Email: 'zoraida@semillasdeti.com',
+					Name: 'Semillas de Ti',
+				},
+				To: [
+					{
+						Email: toEmail,
+						Name: toName || toEmail,
+					},
+				],
+				Subject: '¡Bienvenida a Semillas de Ti!',
+				TextPart: `Hola ${toName || ''},\n\n¡Gracias por suscribirte a Semillas de Ti!\n\nRecibe la guía "5 anclas para volver a ti" en los próximos días.\n\nUn abrazo,\nZoraida`,
+				HTMLPart: `<h2>¡Hola ${toName || ''}!</h2><p>¡Gracias por suscribirte a Semillas de Ti!</p><p>Recibe la guía "5 anclas para volver a ti" en los próximos días.</p><p>Un abrazo,<br/>Zoraida</p>`,
+				CustomID: 'NewsletterSignup',
+			},
+		],
+	};
+
+	const response = await fetch('https://api.mailjet.com/v3.1/send', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Basic ${auth}`,
+		},
+		body: JSON.stringify(payload),
+	});
+
+	if (!response.ok) {
+		const errorText = await response.text();
+		throw new Error(`Mailjet error: ${response.status} - ${errorText}`);
+	}
+
+	return response.json();
+}
+
 export const POST: APIRoute = async ({ request, clientAddress }) => {
 	if (isRateLimited(clientAddress)) {
 		return new Response(JSON.stringify({ message: 'Demasiadas solicitudes. Intenta de nuevo en un minuto.' }), {
@@ -39,16 +87,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 	if (Number.isFinite(contentLength) && contentLength > 10_000) {
 		return new Response(JSON.stringify({ message: 'La solicitud excede el tamaño permitido.' }), {
 			status: 413,
-			headers: { 'Content-Type': 'application/json' },
-		});
-	}
-
-	const brevoApiKey = import.meta.env.BREVO_API_KEY;
-	const listId = Number(import.meta.env.PUBLIC_BREVO_LIST_ID || 0);
-
-	if (!brevoApiKey || !listId) {
-		return new Response(JSON.stringify({ message: 'La newsletter no está configurada en el servidor.' }), {
-			status: 503,
 			headers: { 'Content-Type': 'application/json' },
 		});
 	}
@@ -73,46 +111,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 		});
 	}
 
-	const payload = {
-		email,
-		attributes: {
-			FIRSTNAME: firstName,
-		},
-		listIds: [listId],
-		updateEnabled: true,
-	};
-
 	try {
-		const response = await fetch('https://api.brevo.com/v3/contacts', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'api-key': brevoApiKey,
-			},
-			body: JSON.stringify(payload),
-		});
-
-		if (response.ok || response.status === 204) {
-			return new Response(JSON.stringify({ message: 'Gracias por suscribirte. Revisa tu correo.' }), {
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			});
-		}
-
-		const errorPayload = (await response.json().catch(() => ({}))) as { code?: string; message?: string };
-		if (errorPayload.code === 'duplicate_parameter') {
-			return new Response(JSON.stringify({ message: 'Ya estabas suscrita. Te seguimos enviando recursos.' }), {
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			});
-		}
-
-		return new Response(JSON.stringify({ message: 'No pudimos procesar la suscripción ahora mismo.' }), {
-			status: 502,
+		await sendMailjetEmail(email, firstName);
+		return new Response(JSON.stringify({ message: 'Gracias por suscribirte. Revisa tu correo.' }), {
+			status: 200,
 			headers: { 'Content-Type': 'application/json' },
 		});
-	} catch {
-		return new Response(JSON.stringify({ message: 'No se pudo conectar con Brevo. Intenta más tarde.' }), {
+	} catch (error) {
+		console.error('Newsletter error:', error);
+		return new Response(JSON.stringify({ message: 'No pudimos procesar la suscripción ahora mismo.' }), {
 			status: 502,
 			headers: { 'Content-Type': 'application/json' },
 		});
