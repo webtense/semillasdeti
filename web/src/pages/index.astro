@@ -219,8 +219,7 @@ const websiteSchema = {
 					<p class="tagline text-sienna/80">{site.newsletter.tagline}</p>
 					<h2 class="text-3xl font-serif text-cacao mt-4">{site.newsletter.title}</h2>
 					<p class="text-cacao/70 mt-4">{site.newsletter.description}</p>
-					<form class={`mt-6 space-y-4 ${newsletterDisabled ? 'opacity-60 pointer-events-none' : ''}`} id="newsletter-form">
-						<input type="hidden" name="listid" value={brevoListId} />
+					<form class="mt-6 space-y-4" id="download-form">
 						<div>
 							<label class="text-sm text-cacao/70">Nombre</label>
 							<input
@@ -247,13 +246,8 @@ const websiteSchema = {
 						<button type="submit" class="w-full rounded-full bg-sienna text-white py-3 font-medium">
 							{site.newsletter.cta}
 						</button>
-						<p id="newsletter-status" class="text-sm text-cacao/70"></p>
+						<p id="download-status" class="text-sm text-cacao/70"></p>
 					</form>
-					{newsletterDisabled && (
-						<p class="text-xs text-cacao/60 mt-3">
-							⚠️ Completa `BREVO_API_KEY` y `PUBLIC_BREVO_LIST_ID` en `web/.env` para habilitar la newsletter.
-						</p>
-					)}
 				</div>
 			</div>
 		</section>
@@ -321,8 +315,8 @@ const websiteSchema = {
 	</a>
 
 	<script is:inline>
-		const form = document.querySelector('#newsletter-form');
-		const status = document.querySelector('#newsletter-status');
+		const form = document.querySelector('#download-form');
+		const status = document.querySelector('#download-status');
 		const button = form?.querySelector('button[type="submit"]');
 		if (form && status && button) {
 			form.addEventListener(
@@ -338,13 +332,13 @@ const websiteSchema = {
 						email: String(formData.get('email') || ''),
 					};
 					try {
-						const response = await fetch('/api/newsletter', {
+						const response = await fetch('/api/download-guide', {
 							method: 'POST',
 							headers: { 'Content-Type': 'application/json' },
 							body: JSON.stringify(payload),
 						});
 						const result = await response.json().catch(() => ({ message: 'Error inesperado' }));
-						status.textContent = result.message || (response.ok ? 'Gracias por suscribirte.' : 'No se pudo procesar tu solicitud.');
+						status.textContent = result.message || (response.ok ? '¡Gracias! Tu guía está en camino.' : 'No se pudo procesar tu solicitud.');
 						status.className = response.ok ? 'text-sm text-sage font-medium' : 'text-sm text-sienna font-medium';
 						if (response.ok) {
 							form.reset();
