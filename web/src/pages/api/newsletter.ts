@@ -41,7 +41,7 @@ async function sendMailjetEmail(toEmail: string, toName: string) {
 		Messages: [
 			{
 				From: {
-					Email: 'zoraida@semillasdeti.com',
+					Email: 'webtense@gmail.com',
 					Name: 'Semillas de Ti',
 				},
 				To: [

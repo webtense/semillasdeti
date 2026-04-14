@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { CSRF_COOKIE_NAME } from '../../lib/auth';
 import { getSiteContent } from '../../lib/content';
+import { getLeads } from '../../lib/leads';
 
 export const prerender = false;
 
@@ -12,6 +13,9 @@ const saved = Astro.url.searchParams.get('saved') === '1';
 const uploaded = Astro.url.searchParams.get('uploaded');
 const error = Astro.url.searchParams.get('error') ?? '';
 const rebuild = Astro.url.searchParams.get('rebuild') ?? '';
+const tab = Astro.url.searchParams.get('tab') || 'content';
+
+const leads = tab === 'leads' ? await getLeads() : [];
 
 const errorMap: Record<string, string> = {
 	auth: 'Tu sesión expiró. Vuelve a iniciar sesión.',
@@ -37,10 +41,11 @@ const rebuildMap: Record<string, string> = {
 			<div>
 				<p class="tagline text-sienna/80">Panel de administración</p>
 				<h1 class="text-3xl font-serif text-cacao mt-3">Editar contenido público</h1>
-				<p class="text-cacao/70 mt-2 max-w-3xl">
-					1) Sube imágenes para obtener rutas listas. 2) Pega o edita el JSON. 3) Guarda cambios.
-				</p>
 			</div>
+			<nav class="flex gap-2">
+				<a href="/admin?tab=content" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'content' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Contenido</a>
+				<a href="/admin?tab=leads" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'leads' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Leads ({leads.length})</a>
+			</nav>
 			<form method="post" action="/api/admin/logout">
 				<input type="hidden" name="csrfToken" value={csrfToken} />
 				<button class="rounded-full border border-sienna/40 px-5 py-2 text-sienna font-semibold">Cerrar sesión</button>
@@ -60,53 +65,98 @@ const rebuildMap: Record<string, string> = {
 			</p>
 		)}
 
-		<section class="soft-card rounded-[28px] p-6 md:p-8">
-			<h2 class="text-2xl font-serif text-cacao">Subir imagen</h2>
-			<p class="text-cacao/70 mt-2">
-				Sube JPG, PNG o WEBP (hasta 5MB). Luego usa la ruta en el JSON, por ejemplo <code>/images/uploads/archivo.jpg</code>.
-			</p>
-			<form action="/api/admin/upload" method="post" enctype="multipart/form-data" class="mt-5 flex flex-col gap-4 md:flex-row md:items-end">
-				<input type="hidden" name="csrfToken" value={csrfToken} />
-				<div class="w-full md:max-w-lg">
-					<label class="text-sm text-cacao/70" for="image">Archivo</label>
-					<input id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp" required class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3" />
-				</div>
-				<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Subir</button>
-			</form>
-		</section>
-
-		<section class="soft-card rounded-[28px] p-6 md:p-8">
-			<h2 class="text-2xl font-serif text-cacao">Contenido del sitio (JSON)</h2>
-			<p class="text-cacao/70 mt-2">
-				Puedes editar textos, enlaces e imágenes desde aquí. Conserva la estructura para evitar errores.
-			</p>
-			<form action="/api/admin/content" method="post" class="mt-6 space-y-4">
-				<input type="hidden" name="csrfToken" value={csrfToken} />
-				<label class="sr-only" for="content-json">JSON de contenido</label>
-				<textarea
-					id="content-json"
-					name="content"
-					required
-					class="w-full min-h-[560px] rounded-2xl border border-clay/60 bg-white px-4 py-4 font-mono text-sm leading-6"
-				>{contentJson}</textarea>
-				<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-					<p class="text-sm text-cacao/60">Tip: guarda primero, revisa la portada y luego ajusta detalles finos.</p>
-					<div class="flex gap-3">
-						<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Guardar cambios</button>
+		{tab === 'leads' ? (
+			<section class="soft-card rounded-[28px] p-6 md:p-8">
+				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+					<div>
+						<h2 class="text-2xl font-serif text-cacao">Leads registrados</h2>
+						<p class="text-cacao/70 mt-1">Personas que han descargado la guía "5 Anclas"</p>
 					</div>
+					<form action="/api/admin/leads" method="post">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<input type="hidden" name="action" value="export-csv" />
+						<button type="submit" class="rounded-full border border-sienna/40 px-6 py-3 text-sienna font-semibold">Exportar CSV</button>
+					</form>
 				</div>
-			</form>
-		</section>
 
-		<section class="soft-card rounded-[28px] p-6 md:p-8">
-			<h2 class="text-2xl font-serif text-cacao">Rebuild / Redeploy</h2>
-			<p class="text-cacao/70 mt-2">
-				Si tu despliegue requiere build manual, configura <code>ADMIN_REDEPLOY_COMMAND</code> y ejecútalo desde aquí.
-			</p>
-			<form action="/api/admin/rebuild" method="post" class="mt-5">
-				<input type="hidden" name="csrfToken" value={csrfToken} />
-				<button class="rounded-full border border-sienna/40 px-6 py-3 text-sienna font-semibold" type="submit">Ejecutar rebuild</button>
-			</form>
-		</section>
+				{leads.length === 0 ? (
+					<p class="text-cacao/60">Aún no hay leads registrados.</p>
+				) : (
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead>
+								<tr class="border-b border-clay/60">
+									<th class="text-left py-3 px-4 font-semibold text-cacao">Email</th>
+									<th class="text-left py-3 px-4 font-semibold text-cacao">Nombre</th>
+									<th class="text-left py-3 px-4 font-semibold text-cacao">Fecha de registro</th>
+								</tr>
+							</thead>
+							<tbody>
+								{leads.map((lead) => (
+									<tr class="border-b border-clay/30">
+										<td class="py-3 px-4">{lead.email}</td>
+										<td class="py-3 px-4">{lead.firstName}</td>
+										<td class="py-3 px-4">{new Date(lead.registeredAt).toLocaleString('es-ES')}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				)}
+
+				<p class="text-xs text-cacao/60 mt-4">Total: {leads.length} leads</p>
+			</section>
+		) : (
+			<>
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao">Subir imagen</h2>
+					<p class="text-cacao/70 mt-2">
+						Sube JPG, PNG o WEBP (hasta 5MB). Luego usa la ruta en el JSON, por ejemplo <code>/images/uploads/archivo.jpg</code>.
+					</p>
+					<form action="/api/admin/upload" method="post" enctype="multipart/form-data" class="mt-5 flex flex-col gap-4 md:flex-row md:items-end">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<div class="w-full md:max-w-lg">
+							<label class="text-sm text-cacao/70" for="image">Archivo</label>
+							<input id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp" required class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3" />
+						</div>
+						<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Subir</button>
+					</form>
+				</section>
+
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao">Contenido del sitio (JSON)</h2>
+					<p class="text-cacao/70 mt-2">
+						Puedes editar textos, enlaces e imágenes desde aquí. Conserva la estructura para evitar errores.
+					</p>
+					<form action="/api/admin/content" method="post" class="mt-6 space-y-4">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<label class="sr-only" for="content-json">JSON de contenido</label>
+						<textarea
+							id="content-json"
+							name="content"
+							required
+							class="w-full min-h-[560px] rounded-2xl border border-clay/60 bg-white px-4 py-4 font-mono text-sm leading-6"
+						>{contentJson}</textarea>
+						<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+							<p class="text-sm text-cacao/60">Tip: guarda primero, revisa la portada y luego ajusta detalles finos.</p>
+							<div class="flex gap-3">
+								<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium">Guardar cambios</button>
+							</div>
+						</div>
+					</form>
+				</section>
+
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao">Rebuild / Redeploy</h2>
+					<p class="text-cacao/70 mt-2">
+						Si tu despliegue requiere build manual, configura <code>ADMIN_REDEPLOY_COMMAND</code> y ejecútalo desde aquí.
+					</p>
+					<form action="/api/admin/rebuild" method="post" class="mt-5">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<button class="rounded-full border border-sienna/40 px-6 py-3 text-sienna font-semibold" type="submit">Ejecutar rebuild</button>
+					</form>
+				</section>
+			</>
+		)}
 	</main>
 </Layout>
