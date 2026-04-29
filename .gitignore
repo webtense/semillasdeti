@@ -28,6 +28,7 @@ RESUMEN_PROYECTO_SEMILLASDETI_2026.pdf
 
 # Datos de usuarios (no versionar)
 web/src/data/leads.json
+web/src/data/admin-users.json
 
 # Imágenes sueltas en la raíz
 *.jpg

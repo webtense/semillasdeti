@@ -1,4 +1,5 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { hasUsers, verifyUserCredentials, seedFromEnvIfEmpty } from './admin-users';
 
 export const SESSION_COOKIE_NAME = 'sdt_admin_session';
 export const CSRF_COOKIE_NAME = 'sdt_admin_csrf';
@@ -45,24 +46,28 @@ export function createSessionToken(username: string) {
 }
 
 export function verifySessionToken(token?: string | null) {
-	if (!token) {
-		return false;
-	}
+	if (!token) return false;
 	const [encodedUsername, expiresAtRaw, nonce, signature, ...rest] = token.split('.');
-	if (!encodedUsername || !expiresAtRaw || !nonce || !signature || rest.length > 0) {
-		return false;
-	}
+	if (!encodedUsername || !expiresAtRaw || !nonce || !signature || rest.length > 0) return false;
 	const username = decodeUsername(encodedUsername);
-	if (!username) {
-		return false;
-	}
+	if (!username) return false;
 	const expiresAt = Number(expiresAtRaw);
-	if (!Number.isFinite(expiresAt) || expiresAt < Math.floor(Date.now() / 1000)) {
-		return false;
-	}
+	if (!Number.isFinite(expiresAt) || expiresAt < Math.floor(Date.now() / 1000)) return false;
 	const payload = `${encodedUsername}.${expiresAtRaw}.${nonce}`;
-	const expectedSignature = sign(payload);
-	return secureCompare(signature, expectedSignature);
+	return secureCompare(sign(payload), signature);
+}
+
+export function getSessionUsername(token?: string | null): string | null {
+	if (!token) return null;
+	const [encodedUsername, expiresAtRaw, nonce, signature, ...rest] = token.split('.');
+	if (!encodedUsername || !expiresAtRaw || !nonce || !signature || rest.length > 0) return null;
+	const username = decodeUsername(encodedUsername);
+	if (!username) return null;
+	const expiresAt = Number(expiresAtRaw);
+	if (!Number.isFinite(expiresAt) || expiresAt < Math.floor(Date.now() / 1000)) return null;
+	const payload = `${encodedUsername}.${expiresAtRaw}.${nonce}`;
+	if (!secureCompare(sign(payload), signature)) return null;
+	return username;
 }
 
 export function createCsrfToken() {
@@ -78,12 +83,24 @@ export function getAdminCredentials() {
 	return { username, password };
 }
 
-export function verifyAdminCredentials(usernameInput: string, passwordInput: string) {
-	const { username, password } = getAdminCredentials();
-	if (!usernameInput || !passwordInput) {
+export async function verifyAdminCredentials(usernameInput: string, passwordInput: string): Promise<boolean> {
+	if (!usernameInput || !passwordInput) return false;
+
+	if (await hasUsers()) {
+		return verifyUserCredentials(usernameInput, passwordInput);
+	}
+
+	// Bootstrap: no users yet → validate against env vars and seed JSON store
+	try {
+		const { username, password } = getAdminCredentials();
+		const ok = secureCompare(usernameInput, username) && secureCompare(passwordInput, password);
+		if (ok) {
+			await seedFromEnvIfEmpty(username, password);
+		}
+		return ok;
+	} catch {
 		return false;
 	}
-	return secureCompare(usernameInput, username) && secureCompare(passwordInput, password);
 }
 
 export function isProduction() {

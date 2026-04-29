@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { CSRF_COOKIE_NAME } from '../../lib/auth';
+import { CSRF_COOKIE_NAME, SESSION_COOKIE_NAME, getSessionUsername } from '../../lib/auth';
 import { getSiteContent } from '../../lib/content';
 import { getLeads } from '../../lib/leads';
 import { getListContactCount } from '../../lib/brevo';
+import { listUsers } from '../../lib/admin-users';
 
 export const prerender = false;
 
@@ -21,6 +22,22 @@ const emailError = Astro.url.searchParams.get('emailerror') ?? '';
 const leads = tab === 'leads' || tab === 'mailing' ? await getLeads() : [];
 const brevoListId = Number(import.meta.env.PUBLIC_BREVO_LIST_ID || '1');
 const brevoCount = tab === 'mailing' ? await getListContactCount(brevoListId) : -1;
+
+const adminUsers = tab === 'usuarios' ? await listUsers() : [];
+const currentUsername = getSessionUsername(Astro.cookies.get(SESSION_COOKIE_NAME)?.value);
+const userSaved = Astro.url.searchParams.get('usersaved') === '1';
+const userDeleted = Astro.url.searchParams.get('userdeleted') === '1';
+const pwChanged = Astro.url.searchParams.get('pwchanged') === '1';
+const userError = Astro.url.searchParams.get('usererror') ?? '';
+
+const userErrorMap: Record<string, string> = {
+	short: 'El nombre de usuario debe tener al menos 3 caracteres.',
+	weakpass: 'La contraseña debe tener al menos 8 caracteres.',
+	mismatch: 'Las contraseñas no coinciden.',
+	exists: 'Ese nombre de usuario ya existe.',
+	cantdelete: 'No se puede eliminar el único usuario activo.',
+	notfound: 'Usuario no encontrado.',
+};
 
 const errorMap: Record<string, string> = {
 	auth: 'Tu sesión expiró. Vuelve a iniciar sesión.',
@@ -51,6 +68,7 @@ const rebuildMap: Record<string, string> = {
 				<a href="/admin?tab=content" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'content' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Contenido</a>
 				<a href="/admin?tab=leads" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'leads' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Leads</a>
 				<a href="/admin?tab=mailing" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'mailing' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Mailing</a>
+				<a href="/admin?tab=usuarios" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'usuarios' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Usuarios</a>
 			</nav>
 			<form method="post" action="/api/admin/logout">
 				<input type="hidden" name="csrfToken" value={csrfToken} />
@@ -58,6 +76,10 @@ const rebuildMap: Record<string, string> = {
 			</form>
 		</header>
 
+		{userSaved && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Usuario creado correctamente.</p>}
+		{userDeleted && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Usuario eliminado.</p>}
+		{pwChanged && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Contraseña actualizada correctamente.</p>}
+		{userError && userErrorMap[userError] && <p class="rounded-2xl bg-sienna/10 text-sienna px-4 py-3 text-sm">{userErrorMap[userError]}</p>}
 		{saved && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Contenido guardado correctamente.</p>}
 		{emailSent && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Email de prueba enviado correctamente. Revisa tu bandeja.</p>}
 		{emailError && <p class="rounded-2xl bg-sienna/10 text-sienna px-4 py-3 text-sm">Error al enviar el email: {emailError}</p>}
@@ -73,7 +95,107 @@ const rebuildMap: Record<string, string> = {
 			</p>
 		)}
 
-		{tab === 'mailing' ? (
+		{tab === 'usuarios' ? (
+			<div class="space-y-6">
+				<!-- Lista de usuarios -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-2">Usuarios con acceso al panel</h2>
+					<p class="text-cacao/70 mb-6">Cada usuario puede iniciar sesión en <code>/admin</code> con su usuario y contraseña.</p>
+					<div class="overflow-x-auto">
+						<table class="w-full text-sm">
+							<thead>
+								<tr class="border-b border-clay/60">
+									<th class="text-left py-3 px-4 font-semibold text-cacao">Usuario</th>
+									<th class="text-left py-3 px-4 font-semibold text-cacao">Creado</th>
+									<th class="py-3 px-4"></th>
+								</tr>
+							</thead>
+							<tbody>
+								{adminUsers.map((u) => (
+									<tr class="border-b border-clay/30">
+										<td class="py-3 px-4 font-medium">
+											{u.username}
+											{u.username === currentUsername && <span class="ml-2 text-xs text-sienna/70">(tú)</span>}
+										</td>
+										<td class="py-3 px-4 text-cacao/60">{new Date(u.createdAt).toLocaleDateString('es-ES')}</td>
+										<td class="py-3 px-4 text-right">
+											{adminUsers.length > 1 && (
+												<form method="post" action="/api/admin/users" class="inline">
+													<input type="hidden" name="csrfToken" value={csrfToken} />
+													<input type="hidden" name="action" value="delete" />
+													<input type="hidden" name="id" value={u.id} />
+													<button
+														type="submit"
+														class="text-xs text-sienna/70 hover:text-sienna border border-sienna/30 hover:border-sienna/60 rounded-full px-3 py-1 transition-colors"
+														onclick="return confirm('¿Eliminar este usuario?')"
+													>Eliminar</button>
+												</form>
+											)}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+				<!-- Añadir usuario -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-2">Añadir usuario</h2>
+					<p class="text-cacao/70 mb-5">Crea acceso para otra persona (mínimo 8 caracteres en la contraseña).</p>
+					<form method="post" action="/api/admin/users" class="grid sm:grid-cols-3 gap-3">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<input type="hidden" name="action" value="add" />
+						<div>
+							<label class="text-xs text-cacao/60 mb-1 block">Usuario</label>
+							<input type="text" name="username" required minlength="3"
+								placeholder="zoraida"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm" />
+						</div>
+						<div>
+							<label class="text-xs text-cacao/60 mb-1 block">Contraseña</label>
+							<input type="password" name="password" required minlength="8"
+								placeholder="••••••••"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm" />
+						</div>
+						<div>
+							<label class="text-xs text-cacao/60 mb-1 block">Confirmar contraseña</label>
+							<input type="password" name="confirm" required minlength="8"
+								placeholder="••••••••"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm" />
+						</div>
+						<div class="sm:col-span-3 flex justify-end">
+							<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium text-sm">Crear usuario</button>
+						</div>
+					</form>
+				</section>
+
+				<!-- Cambiar mi contraseña -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-2">Cambiar mi contraseña</h2>
+					<p class="text-cacao/70 mb-5">Sesión activa como <strong>{currentUsername}</strong>.</p>
+					<form method="post" action="/api/admin/users" class="grid sm:grid-cols-2 gap-3">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<input type="hidden" name="action" value="change-password" />
+						<div>
+							<label class="text-xs text-cacao/60 mb-1 block">Nueva contraseña</label>
+							<input type="password" name="newPassword" required minlength="8"
+								placeholder="••••••••"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm" />
+						</div>
+						<div>
+							<label class="text-xs text-cacao/60 mb-1 block">Confirmar nueva contraseña</label>
+							<input type="password" name="confirmPassword" required minlength="8"
+								placeholder="••••••••"
+								class="w-full rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm" />
+						</div>
+						<div class="sm:col-span-2 flex justify-end">
+							<button type="submit" class="rounded-full border border-sienna/40 text-sienna px-6 py-3 font-medium text-sm">Actualizar contraseña</button>
+						</div>
+					</form>
+				</section>
+			</div>
+		) : tab === 'mailing' ? (
 			<div class="space-y-6">
 				<!-- Stats -->
 				<div class="grid sm:grid-cols-3 gap-4">

@@ -3,7 +3,6 @@ import {
 	createCsrfToken,
 	createSessionToken,
 	CSRF_COOKIE_NAME,
-	getAdminCredentials,
 	isProduction,
 	SESSION_COOKIE_NAME,
 	verifyAdminCredentials,
@@ -60,17 +59,11 @@ export const POST: APIRoute = async ({ request, redirect, cookies, clientAddress
 		return redirect('/admin/login?reason=limited', 302);
 	}
 
-	try {
-		getAdminCredentials();
-	} catch {
-		return new Response('Admin credentials are not configured.', { status: 500 });
-	}
-
 	const formData = await request.formData();
 	const username = String(formData.get('username') || '').trim();
 	const password = String(formData.get('password') || '');
 
-	if (!verifyAdminCredentials(username, password)) {
+	if (!await verifyAdminCredentials(username, password)) {
 		registerFailedAttempt(clientAddress);
 		return redirect('/admin/login?reason=invalid', 302);
 	}
