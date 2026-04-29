@@ -16,6 +16,19 @@ export interface SiteContent {
 		badgeText: string;
 	};
 	stats: Array<{ label: string; value: string }>;
+	origin: {
+		tagline: string;
+		dateLabel: string;
+		manifesto: string[];
+		quote: string;
+		insight: string;
+		image1: string;
+		image2: string;
+		imageAlt: string;
+		whatIs: { tagline: string; description: string; detail: string };
+		process: { tagline: string; steps: Array<{ verb: string; detail: string }> };
+		whatIsNot: { tagline: string; items: string[]; closing: string };
+	};
 	about: {
 		tagline: string;
 		title: string;
@@ -28,6 +41,7 @@ export interface SiteContent {
 	method: {
 		tagline: string;
 		title: string;
+		description: string;
 		steps: Array<{ title: string; description: string }>;
 	};
 	services: {
@@ -93,6 +107,42 @@ export const defaultSiteContent: SiteContent = {
 		{ label: 'Sesiones online', value: '+950' },
 		{ label: 'Valoración media', value: '4.9/5' },
 	],
+	origin: {
+		tagline: 'De dónde nace',
+		dateLabel: 'Día 1',
+		manifesto: [
+			'Hace tiempo contemplé crear un espacio desde el que acompañar a personas. Un espacio vinculado al coaching, pero con una base muy clara: la introspección.',
+			'En mi propio camino, mirar hacia dentro ha sido una de las herramientas que más me ha ayudado. Y la escritura ha sido una forma muy poderosa de hacerlo. Esa era la semilla. Quizá nunca desapareció. Solo estaba esperando su momento.',
+			'Un día caminando, me paré delante de unas flores que nacían al pie de un árbol. Estaban ahí, todas distintas y todas juntas. Compartiendo el mismo espacio sin necesidad de parecerse entre ellas.',
+			'Hoy he sentido que mi forma de meditar aparece cuando me muevo. No he caminado para hacer kilómetros. He caminado para escucharme.',
+		],
+		quote: 'Aunque me cueste decirlo. Aunque me dé vértigo mostrarlo. Hoy empieza así. Con algo tan común como unas flores.',
+		insight: 'Somos diferentes. Cada persona siente de una forma, piensa de una forma y encuentra caminos distintos para escucharse.',
+		image1: '/images/flores-origen-1.jpg',
+		image2: '/images/flores-origen-2.jpg',
+		imageAlt: 'Flores silvestres al pie de un árbol, durante una caminata de Zoraida',
+		whatIs: {
+			tagline: 'Qué es',
+			description: 'Semillas de Ti es un espacio para escucharse caminando.',
+			detail: 'Parte de una idea sencilla: estar bien físicamente también empieza por estar bien emocionalmente. Aquí el objetivo no es contar kilómetros ni medir ritmos. Es crear un momento para escucharse, ordenar lo que se mueve dentro y cuidar lo emocional.',
+		},
+		process: {
+			tagline: 'El proceso',
+			steps: [
+				{ verb: 'Camino', detail: 'Me muevo cuando puedo, con cascos, música o silencio.' },
+				{ verb: 'Siento', detail: 'Dejo que aparezca lo que se mueve dentro, sin filtro.' },
+				{ verb: 'Grabo', detail: 'Notas de voz espontáneas, sin editar ni juzgar.' },
+				{ verb: 'Escucho', detail: 'Me siento con lo grabado y dejo que resuene.' },
+				{ verb: 'Escribo', detail: 'Lo paso al cuaderno, doy forma a lo que sentí.' },
+				{ verb: 'Entiendo', detail: 'Encuentro el sentido, la idea, la emoción que estaba ahí.' },
+			],
+		},
+		whatIsNot: {
+			tagline: 'Qué no es',
+			items: ['No es terapia.', 'No sustituye a profesionales.', 'No es un grupo de ayuda dirigido.'],
+			closing: 'Es un espacio para parar sin quedarse quieto. Para caminar, respirar, sentir, escribir y comprender. Cada uno a su manera.',
+		},
+	},
 	about: {
 		tagline: 'Quién está detrás',
 		title: 'Hola, soy Zoraida',
@@ -114,7 +164,8 @@ export const defaultSiteContent: SiteContent = {
 	},
 	method: {
 		tagline: 'Cómo trabajo',
-		title: 'Un método vivo que mezcla enfoque estratégico y calidez humana.',
+		title: 'Un proceso vivo que parte de escucharse para crear cambios reales.',
+		description: 'No importa desde dónde empiezas. Lo que importa es que algo dentro de ti quiere moverse.',
 		steps: [
 			{
 				title: 'Exploración consciente',
@@ -243,6 +294,7 @@ export function normalizeContent(raw: unknown): SiteContent {
 	const source = asObject(raw);
 	const brand = asObject(source.brand);
 	const hero = asObject(source.hero);
+	const originRaw = asObject(source.origin);
 	const about = asObject(source.about);
 	const method = asObject(source.method);
 	const services = asObject(source.services);
@@ -250,6 +302,7 @@ export function normalizeContent(raw: unknown): SiteContent {
 	const newsletter = asObject(source.newsletter);
 	const contact = asObject(source.contact);
 	const footer = asObject(source.footer);
+	const def = defaultSiteContent;
 
 	const navLinks = Array.isArray(source.navLinks)
 		? source.navLinks
@@ -331,10 +384,26 @@ export function normalizeContent(raw: unknown): SiteContent {
 				.slice(0, 8)
 		: defaultSiteContent.about.values;
 
+	const originWhatIs = asObject(originRaw.whatIs);
+	const originProcess = asObject(originRaw.process);
+	const originWhatIsNot = asObject(originRaw.whatIsNot);
+	const originProcessSteps = Array.isArray(originProcess.steps)
+		? originProcess.steps
+				.map((entry, i) => {
+					const parsed = asObject(entry);
+					const fallback = def.origin.process.steps[i] ?? def.origin.process.steps[0];
+					return {
+						verb: asString(parsed.verb, fallback.verb, 80),
+						detail: asString(parsed.detail, fallback.detail, 300),
+					};
+				})
+				.slice(0, 8)
+		: def.origin.process.steps;
+
 	return {
 		brand: {
-			name: asString(brand.name, defaultSiteContent.brand.name, 80),
-			subtitle: asString(brand.subtitle, defaultSiteContent.brand.subtitle, 200),
+			name: asString(brand.name, def.brand.name, 80),
+			subtitle: asString(brand.subtitle, def.brand.subtitle, 200),
 		},
 		navLinks,
 		hero: {
@@ -349,6 +418,30 @@ export function normalizeContent(raw: unknown): SiteContent {
 			badgeText: asString(hero.badgeText, defaultSiteContent.hero.badgeText, 180),
 		},
 		stats,
+		origin: {
+			tagline: asString(originRaw.tagline, def.origin.tagline, 140),
+			dateLabel: asString(originRaw.dateLabel, def.origin.dateLabel, 80),
+			manifesto: asStringList(originRaw.manifesto, def.origin.manifesto, 8, 900),
+			quote: asString(originRaw.quote, def.origin.quote, 400),
+			insight: asString(originRaw.insight, def.origin.insight, 400),
+			image1: asString(originRaw.image1, def.origin.image1, 280),
+			image2: asString(originRaw.image2, def.origin.image2, 280),
+			imageAlt: asString(originRaw.imageAlt, def.origin.imageAlt, 200),
+			whatIs: {
+				tagline: asString(originWhatIs.tagline, def.origin.whatIs.tagline, 80),
+				description: asString(originWhatIs.description, def.origin.whatIs.description, 300),
+				detail: asString(originWhatIs.detail, def.origin.whatIs.detail, 900),
+			},
+			process: {
+				tagline: asString(originProcess.tagline, def.origin.process.tagline, 80),
+				steps: originProcessSteps,
+			},
+			whatIsNot: {
+				tagline: asString(originWhatIsNot.tagline, def.origin.whatIsNot.tagline, 80),
+				items: asStringList(originWhatIsNot.items, def.origin.whatIsNot.items, 8, 200),
+				closing: asString(originWhatIsNot.closing, def.origin.whatIsNot.closing, 400),
+			},
+		},
 		about: {
 			tagline: asString(about.tagline, defaultSiteContent.about.tagline, 140),
 			title: asString(about.title, defaultSiteContent.about.title, 180),
@@ -359,8 +452,9 @@ export function normalizeContent(raw: unknown): SiteContent {
 			values,
 		},
 		method: {
-			tagline: asString(method.tagline, defaultSiteContent.method.tagline, 140),
-			title: asString(method.title, defaultSiteContent.method.title, 240),
+			tagline: asString(method.tagline, def.method.tagline, 140),
+			title: asString(method.title, def.method.title, 240),
+			description: asString(method.description, def.method.description, 400),
 			steps: methodSteps,
 		},
 		services: {

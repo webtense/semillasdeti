@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { CSRF_COOKIE_NAME } from '../../lib/auth';
 import { getSiteContent } from '../../lib/content';
 import { getLeads } from '../../lib/leads';
+import { getListContactCount } from '../../lib/brevo';
 
 export const prerender = false;
 
@@ -14,8 +15,12 @@ const uploaded = Astro.url.searchParams.get('uploaded');
 const error = Astro.url.searchParams.get('error') ?? '';
 const rebuild = Astro.url.searchParams.get('rebuild') ?? '';
 const tab = Astro.url.searchParams.get('tab') || 'content';
+const emailSent = Astro.url.searchParams.get('emailsent') === '1';
+const emailError = Astro.url.searchParams.get('emailerror') ?? '';
 
-const leads = tab === 'leads' ? await getLeads() : [];
+const leads = tab === 'leads' || tab === 'mailing' ? await getLeads() : [];
+const brevoListId = Number(import.meta.env.PUBLIC_BREVO_LIST_ID || '1');
+const brevoCount = tab === 'mailing' ? await getListContactCount(brevoListId) : -1;
 
 const errorMap: Record<string, string> = {
 	auth: 'Tu sesión expiró. Vuelve a iniciar sesión.',
@@ -42,9 +47,10 @@ const rebuildMap: Record<string, string> = {
 				<p class="tagline text-sienna/80">Panel de administración</p>
 				<h1 class="text-3xl font-serif text-cacao mt-3">Editar contenido público</h1>
 			</div>
-			<nav class="flex gap-2">
+			<nav class="flex gap-2 flex-wrap">
 				<a href="/admin?tab=content" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'content' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Contenido</a>
-				<a href="/admin?tab=leads" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'leads' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Leads ({leads.length})</a>
+				<a href="/admin?tab=leads" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'leads' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Leads</a>
+				<a href="/admin?tab=mailing" class={`px-4 py-2 rounded-full text-sm font-medium ${tab === 'mailing' ? 'bg-sienna text-white' : 'border border-sienna/40 text-sienna'}`}>Mailing</a>
 			</nav>
 			<form method="post" action="/api/admin/logout">
 				<input type="hidden" name="csrfToken" value={csrfToken} />
@@ -53,6 +59,8 @@ const rebuildMap: Record<string, string> = {
 		</header>
 
 		{saved && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Contenido guardado correctamente.</p>}
+		{emailSent && <p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">Email de prueba enviado correctamente. Revisa tu bandeja.</p>}
+		{emailError && <p class="rounded-2xl bg-sienna/10 text-sienna px-4 py-3 text-sm">Error al enviar el email: {emailError}</p>}
 		{uploaded && (
 			<p class="rounded-2xl bg-sage/10 text-sage px-4 py-3 text-sm">
 				Imagen subida con éxito: <code>{uploaded}</code>
@@ -65,7 +73,84 @@ const rebuildMap: Record<string, string> = {
 			</p>
 		)}
 
-		{tab === 'leads' ? (
+		{tab === 'mailing' ? (
+			<div class="space-y-6">
+				<!-- Stats -->
+				<div class="grid sm:grid-cols-3 gap-4">
+					<div class="soft-card rounded-2xl p-6 text-center">
+						<p class="text-3xl font-serif text-sienna">{leads.length}</p>
+						<p class="text-sm text-cacao/70 mt-1">Leads locales</p>
+					</div>
+					<div class="soft-card rounded-2xl p-6 text-center">
+						<p class="text-3xl font-serif text-sienna">{brevoCount >= 0 ? brevoCount : '—'}</p>
+						<p class="text-sm text-cacao/70 mt-1">Contactos en Brevo</p>
+					</div>
+					<div class="soft-card rounded-2xl p-6 text-center">
+						<p class="text-3xl font-serif text-sienna">200</p>
+						<p class="text-sm text-cacao/70 mt-1">Objetivo 60 días</p>
+					</div>
+				</div>
+
+				<!-- Estado de la integración -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-4">Estado del mailing</h2>
+					<ul class="space-y-3 text-sm">
+						<li class="flex items-center gap-3">
+							<span class="w-2 h-2 rounded-full bg-sage flex-shrink-0"></span>
+							<span class="text-cacao/80">Brevo configurado — Lista ID: <code class="text-sienna">{brevoListId}</code></span>
+						</li>
+						<li class="flex items-center gap-3">
+							<span class="w-2 h-2 rounded-full bg-sage flex-shrink-0"></span>
+							<span class="text-cacao/80">Lead magnet activo: "5 Anclas para Volver a Ti" — enviado automáticamente al registrarse</span>
+						</li>
+						<li class="flex items-center gap-3">
+							<span class="w-2 h-2 rounded-full bg-sage flex-shrink-0"></span>
+							<span class="text-cacao/80">Contacto se añade a la lista Brevo en cada registro</span>
+						</li>
+						<li class="flex items-center gap-3">
+							<span class="w-2 h-2 rounded-full bg-clay flex-shrink-0"></span>
+							<span class="text-cacao/80">Automatización Brevo: configurar en el panel de Brevo una secuencia de bienvenida adicional (día 3, día 7)</span>
+						</li>
+					</ul>
+				</section>
+
+				<!-- Test email -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-2">Enviar email de prueba</h2>
+					<p class="text-cacao/70 mb-5">Envía la guía "5 Anclas" a cualquier dirección para verificar que el email llega correctamente.</p>
+					<form id="test-email-form" class="flex flex-col sm:flex-row gap-3">
+						<input type="hidden" name="csrfToken" value={csrfToken} />
+						<input
+							type="email"
+							name="email"
+							required
+							placeholder="email@ejemplo.com"
+							class="flex-1 rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm"
+						/>
+						<input
+							type="text"
+							name="firstName"
+							placeholder="Nombre (opcional)"
+							class="w-full sm:w-40 rounded-2xl border border-clay/60 bg-white px-4 py-3 text-sm"
+						/>
+						<button type="submit" class="rounded-full bg-sienna text-white px-6 py-3 font-medium text-sm">Enviar prueba</button>
+					</form>
+					<p id="test-status" class="text-sm mt-3 text-cacao/60"></p>
+				</section>
+
+				<!-- Guía del flujo -->
+				<section class="soft-card rounded-[28px] p-6 md:p-8">
+					<h2 class="text-2xl font-serif text-cacao mb-4">Flujo de captación</h2>
+					<ol class="space-y-3 text-sm text-cacao/80">
+						<li class="flex gap-3"><span class="font-semibold text-sienna flex-shrink-0">1.</span> Visitante rellena el formulario en la sección Newsletter de la web</li>
+						<li class="flex gap-3"><span class="font-semibold text-sienna flex-shrink-0">2.</span> Se guarda el lead localmente (leads.json) como backup</li>
+						<li class="flex gap-3"><span class="font-semibold text-sienna flex-shrink-0">3.</span> Se añade el contacto a la lista {brevoListId} de Brevo con el nombre</li>
+						<li class="flex gap-3"><span class="font-semibold text-sienna flex-shrink-0">4.</span> Se envía el email con la guía "5 Anclas" vía Brevo transactional</li>
+						<li class="flex gap-3"><span class="font-semibold text-sienna flex-shrink-0">5.</span> <span>Desde el panel de <strong>Brevo → Automatizaciones</strong>, puedes activar una secuencia: día 3 (reflexión) y día 7 (CTA sesión)</span></li>
+					</ol>
+				</section>
+			</div>
+		) : tab === 'leads' ? (
 			<section class="soft-card rounded-[28px] p-6 md:p-8">
 				<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 					<div>
@@ -159,4 +244,32 @@ const rebuildMap: Record<string, string> = {
 			</>
 		)}
 	</main>
+
+<script is:inline>
+	const testForm = document.querySelector('#test-email-form');
+	const testStatus = document.querySelector('#test-status');
+	if (testForm && testStatus) {
+		testForm.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const form = e.target;
+			const email = form.querySelector('[name="email"]').value;
+			const firstName = form.querySelector('[name="firstName"]').value;
+			testStatus.textContent = 'Enviando...';
+			testStatus.className = 'text-sm mt-3 text-cacao/60';
+			try {
+				const res = await fetch('/api/download-guide', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ email, firstName }),
+				});
+				const data = await res.json().catch(() => ({}));
+				testStatus.textContent = data.message || (res.ok ? 'Email enviado.' : 'Error al enviar.');
+				testStatus.className = res.ok ? 'text-sm mt-3 text-sage font-medium' : 'text-sm mt-3 text-sienna font-medium';
+			} catch {
+				testStatus.textContent = 'Error de conexión.';
+				testStatus.className = 'text-sm mt-3 text-sienna font-medium';
+			}
+		});
+	}
+</script>
 </Layout>

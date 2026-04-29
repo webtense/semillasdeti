@@ -1,9 +1,10 @@
 ---
 import '../styles/global.css';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
 
 const {
 	title = 'Semillas de Ti | Coaching emocional por Zoraida Pozo Barrio',
-	description = 'Procesos de coaching personal y profesional con un enfoque cálido y práctico para reconectar con tu dirección.',
+	description = 'Semillas de Ti — coaching emocional e introspección en movimiento por Zoraida Pozo Barrio. Caminar, sentir, escribir y comprender para crear cambios reales desde dentro.',
 	image = '/images/hero.jpg',
 	noindex = false,
 	structuredData,
@@ -53,5 +54,6 @@ const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 	</head>
 	<body class="bg-sand text-cacao antialiased">
 		<slot />
+		<WhatsAppButton />
 	</body>
 </html>

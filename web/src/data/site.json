@@ -5,6 +5,10 @@
   },
   "navLinks": [
     {
+      "label": "El origen",
+      "href": "#origen"
+    },
+    {
       "label": "Quién soy",
       "href": "#quien-soy"
     },
@@ -22,9 +26,9 @@
     }
   ],
   "hero": {
-    "tagline": "Coaching emocional & profesional",
+    "tagline": "Coaching emocional · Introspección en movimiento",
     "title": "Cultiva decisiones más conscientes y una vida con dirección propia.",
-    "description": "Soy Zoraida Pozo Barrio y acompaño a mujeres y equipos a reconectar con su voz interior, a regular lo que sienten y a sostener cambios reales con mucha humanidad y estrategia.",
+    "description": "Soy Zoraida Pozo Barrio. Acompaño a personas a reconectar con su voz interior a través de la introspección en movimiento: caminar, sentir, escribir y comprender para crear cambios reales con humanidad y alma.",
     "primaryCta": "Reserva una llamada",
     "secondaryCta": "Habla por WhatsApp",
     "image": "/images/hero.jpg",
@@ -46,6 +50,46 @@
       "value": "4.9/5"
     }
   ],
+  "origin": {
+    "tagline": "De dónde nace",
+    "dateLabel": "Día 1",
+    "manifesto": [
+      "Hace tiempo contemplé crear un espacio desde el que acompañar a personas. Un espacio vinculado al coaching, pero con una base muy clara: la introspección.",
+      "En mi propio camino, mirar hacia dentro ha sido una de las herramientas que más me ha ayudado. Y la escritura ha sido una forma muy poderosa de hacerlo. Esa era la semilla. Quizá nunca desapareció. Solo estaba esperando su momento.",
+      "Un día caminando, me paré delante de unas flores que nacían al pie de un árbol. Estaban ahí, todas distintas y todas juntas. Compartiendo el mismo espacio sin necesidad de parecerse entre ellas.",
+      "Hoy he sentido que mi forma de meditar aparece cuando me muevo. No he caminado para hacer kilómetros. He caminado para escucharme."
+    ],
+    "quote": "Aunque me cueste decirlo. Aunque me dé vértigo mostrarlo. Hoy empieza así. Con algo tan común como unas flores.",
+    "insight": "Somos diferentes. Cada persona siente de una forma, piensa de una forma y encuentra caminos distintos para escucharse.",
+    "image1": "/images/flores-origen-1.jpg",
+    "image2": "/images/flores-origen-2.jpg",
+    "imageAlt": "Flores silvestres al pie de un árbol, durante una caminata de Zoraida",
+    "whatIs": {
+      "tagline": "Qué es",
+      "description": "Semillas de Ti es un espacio para escucharse caminando.",
+      "detail": "Parte de una idea sencilla: estar bien físicamente también empieza por estar bien emocionalmente. Caminar puede cuidar el cuerpo, pero aquí el objetivo no es contar kilómetros ni medir ritmos. Es crear un momento para escucharse, ordenar lo que se mueve dentro y cuidar lo emocional. Porque no todo el mundo se encuentra a sí mismo en silencio."
+    },
+    "process": {
+      "tagline": "El proceso",
+      "steps": [
+        { "verb": "Camino", "detail": "Me muevo cuando puedo, con cascos, música o silencio." },
+        { "verb": "Siento", "detail": "Dejo que aparezca lo que se mueve dentro, sin filtro." },
+        { "verb": "Grabo", "detail": "Notas de voz espontáneas, sin editar ni juzgar." },
+        { "verb": "Escucho", "detail": "Me siento con lo grabado y dejo que resuene." },
+        { "verb": "Escribo", "detail": "Lo paso al cuaderno, doy forma a lo que sentí." },
+        { "verb": "Entiendo", "detail": "Encuentro el sentido, la idea, la emoción que estaba ahí." }
+      ]
+    },
+    "whatIsNot": {
+      "tagline": "Qué no es",
+      "items": [
+        "No es terapia.",
+        "No sustituye a profesionales.",
+        "No es un grupo de ayuda dirigido."
+      ],
+      "closing": "Es un espacio para parar sin quedarse quieto. Para caminar, respirar, sentir, escribir y comprender. Cada uno a su manera."
+    }
+  },
   "about": {
     "tagline": "Quién está detrás",
     "title": "Hola, soy Zoraida",
@@ -74,7 +118,8 @@
   },
   "method": {
     "tagline": "Cómo trabajo",
-    "title": "Un método vivo que mezcla enfoque estratégico y calidez humana.",
+    "title": "Un proceso vivo que parte de escucharse para crear cambios reales.",
+    "description": "No importa desde dónde empiezas. Lo que importa es que algo dentro de ti quiere moverse.",
     "steps": [
       {
         "title": "Exploración consciente",
@@ -148,7 +193,7 @@
   },
   "newsletter": {
     "tagline": "Newsletter cálida",
-    "title": "Recibe la guía “5 anclas para volver a ti”.",
+    "title": "Recibe la guía ‘5 anclas para volver a ti’.",
     "description": "Historias reales, ejercicios breves y recordatorios para reconectar contigo. Un correo a la semana, sin ruido.",
     "image": "/images/newsletter.jpg",
     "imageAlt": "Mujer escribiendo en cuaderno",

@@ -1,0 +1,17 @@
+---
+const calendlyUrl = import.meta.env.PUBLIC_CALENDLY_URL || '';
+---
+
+{calendlyUrl && (
+	<div class="mt-8">
+		<div class="calendly-inline-widget" data-url={calendlyUrl} style="min-width:320px;height:700px;"></div>
+		<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+	</div>
+)}
+
+<style>
+	.calendly-inline-widget {
+		border-radius: 16px;
+		overflow: hidden;
+	}
+</style>

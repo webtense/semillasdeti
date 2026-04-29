@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getSiteContent } from '../lib/content';
+import CalendlyEmbed from '../components/CalendlyEmbed.astro';
 
 export const prerender = false;
 
@@ -24,7 +25,8 @@ const organizationSchema = {
 	email: site.contact.email,
 	telephone: site.contact.whatsappNumber,
 	areaServed: ['Madrid', 'Barcelona', 'España'],
-	serviceType: site.services.items.map((service) => service.title),
+	serviceType: [...site.services.items.map((service) => service.title), 'Introspección en movimiento', 'Escucha emocional caminando'],
+	knowsAbout: ['Coaching emocional', 'Introspección en movimiento', 'Bienestar emocional', 'Escritura terapéutica', 'Meditación activa'],
 };
 
 const personSchema = {
@@ -47,9 +49,61 @@ const websiteSchema = {
 	url: 'https://semillasdeti.com/',
 	inLanguage: 'es-ES',
 };
+
+const howToSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'HowTo',
+	name: 'Introspección en movimiento: cómo escucharte caminando',
+	description: 'Proceso de 6 pasos para practicar la introspección a través del movimiento, las notas de voz y la escritura.',
+	step: site.origin.process.steps.map((s, i) => ({
+		'@type': 'HowToStep',
+		position: i + 1,
+		name: s.verb,
+		text: s.detail,
+	})),
+};
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: [
+		{
+			'@type': 'Question',
+			name: '¿Qué es Semillas de Ti?',
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `${site.origin.whatIs.description} ${site.origin.whatIs.detail}`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: '¿Es Semillas de Ti una terapia o servicio psicológico?',
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `No. ${site.origin.whatIsNot.items.join(' ')} ${site.origin.whatIsNot.closing}`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: '¿Cómo funciona la introspección en movimiento?',
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `El proceso tiene 6 pasos: ${site.origin.process.steps.map((s) => `${s.verb} (${s.detail})`).join('; ')}.`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: '¿Cómo puedo reservar una sesión con Zoraida Pozo Barrio?',
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `Puedes reservar una llamada exploratoria gratuita de 25 minutos contactando por WhatsApp al ${site.contact.whatsappNumber} o por email a ${site.contact.email}. Modalidad: ${site.contact.mode}.`,
+			},
+		},
+	],
+};
 ---
 
-<Layout structuredData={[websiteSchema, organizationSchema, personSchema]}>
+<Layout structuredData={[websiteSchema, organizationSchema, personSchema, howToSchema, faqSchema]}>
 	<header class="sticky top-0 z-30 bg-sand/95 backdrop-blur-md border-b border-clay/60">
 		<div class="section-shell flex items-center justify-between py-4">
 			<div>
@@ -99,16 +153,87 @@ const websiteSchema = {
 							<p class="text-sm text-cacao/70">{item.label}</p>
 						</div>
 					))}
+</div>
+			<CalendlyEmbed />
+		</div>
+	</section>
+
+		<section id="origen" class="py-24 overflow-hidden">
+			<div class="section-shell">
+
+				<div class="mb-14">
+					<p class="tagline text-sienna/80">{site.origin.tagline}</p>
+					<h2 class="font-serif text-cacao mt-4 text-7xl sm:text-9xl leading-none tracking-tight opacity-90">{site.origin.dateLabel}</h2>
 				</div>
-			</div>
-			<div class="relative">
-				<div class="rounded-[32px] overflow-hidden shadow-soft border border-white/60">
-					<img src={site.hero.image} alt={site.hero.imageAlt} class="w-full h-full object-cover" />
+
+				<div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 items-start">
+					<div class="space-y-5 text-lg text-cacao/80 leading-[1.85]">
+						{site.origin.manifesto.map((p, i) => (
+							i === 1
+								? <blockquote class="border-l-2 border-sienna/40 pl-6 text-2xl font-serif text-cacao/90 italic my-8 leading-snug">{p}</blockquote>
+								: <p>{p}</p>
+						))}
+						<p class="text-xl font-serif text-sienna pt-2">{site.origin.insight}</p>
+						<p class="text-cacao/60 text-base italic pt-2">{site.origin.quote}</p>
+					</div>
+					<div class="lg:sticky lg:top-28">
+						<div class="rounded-[2.5rem] overflow-hidden shadow-soft">
+							<img
+								src={site.origin.image1}
+								alt={site.origin.imageAlt}
+								class="w-full object-cover"
+								style="aspect-ratio:3/4;"
+								loading="lazy"
+							/>
+						</div>
+					</div>
 				</div>
-				<div class="absolute -bottom-6 left-6 bg-white rounded-2xl shadow-soft p-5 max-w-xs">
-					<p class="text-sm text-cacao/70">{site.hero.badgeTitle}</p>
-					<p class="text-2xl font-serif text-sienna">{site.hero.badgeText}</p>
+
+				<div class="mt-24 grid lg:grid-cols-[0.45fr_1fr] gap-12 items-center">
+					<div class="rounded-[2rem] overflow-hidden shadow-soft">
+						<img
+							src={site.origin.image2}
+							alt={site.origin.imageAlt}
+							class="w-full object-cover"
+							style="aspect-ratio:4/3;"
+							loading="lazy"
+						/>
+					</div>
+					<div>
+						<p class="tagline text-sienna/80">{site.origin.whatIs.tagline}</p>
+						<p class="text-2xl font-serif text-cacao mt-4 leading-snug">{site.origin.whatIs.description}</p>
+						<p class="text-cacao/70 mt-4 text-lg leading-relaxed">{site.origin.whatIs.detail}</p>
+
+						<div class="mt-10 border border-clay/50 rounded-2xl bg-white/60 p-6">
+							<p class="tagline text-sienna/80 mb-5">{site.origin.whatIsNot.tagline}</p>
+							<ul class="space-y-2 text-cacao/70">
+								{site.origin.whatIsNot.items.map((item) => (
+									<li class="flex gap-3 items-start">
+										<span class="text-sienna/40 select-none leading-7">—</span>
+										<span>{item}</span>
+									</li>
+								))}
+							</ul>
+							<p class="mt-5 text-cacao/60 text-sm italic">{site.origin.whatIsNot.closing}</p>
+						</div>
+					</div>
 				</div>
+
+				<div class="mt-24">
+					<p class="tagline text-sienna/80 mb-10">{site.origin.process.tagline}</p>
+					<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
+						{site.origin.process.steps.map((step, i) => (
+							<div class="flex gap-5 items-start">
+								<span class="text-6xl font-serif text-sienna/15 leading-none select-none flex-shrink-0">{i + 1}</span>
+								<div class="pt-2">
+									<p class="font-serif text-2xl text-cacao">{step.verb}</p>
+									<p class="text-sm text-cacao/60 mt-1 leading-relaxed">{step.detail}</p>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+
 			</div>
 		</section>
 
@@ -145,6 +270,9 @@ const websiteSchema = {
 			<div class="section-shell">
 				<p class="tagline text-sienna/80">{site.method.tagline}</p>
 				<h2 class="text-3xl font-serif text-cacao mt-4 max-w-3xl">{site.method.title}</h2>
+				{site.method.description && (
+					<p class="text-cacao/65 mt-3 max-w-xl text-lg">{site.method.description}</p>
+				)}
 				<div class="mt-10 grid gap-6 md:grid-cols-3">
 					{site.method.steps.map((step, index) => (
 						<div class="soft-card rounded-3xl p-6 flex flex-col gap-4">

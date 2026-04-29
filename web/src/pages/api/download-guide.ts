@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { addLead } from '../../lib/leads';
-import { sendDownloadEmail } from './mail-download';
+import { addContactToList } from '../../lib/brevo';
+import { sendGuideEmail } from './mail-download';
 
 export const prerender = false;
 
@@ -30,28 +31,32 @@ export const POST: APIRoute = async ({ request }) => {
 	}
 
 	try {
-		const lead = await addLead(email, firstName || 'amiga');
-		
-		await sendDownloadEmail(email, firstName || 'amiga');
+		// 1. Guarda el lead en JSON local (siempre)
+		await addLead(email, firstName || 'amiga');
+
+		// 2. Añade el contacto a la lista de Brevo (no bloquea si falla)
+		const listId = Number((import.meta.env.PUBLIC_BREVO_LIST_ID as string | undefined) ?? process.env.PUBLIC_BREVO_LIST_ID ?? '1');
+		try {
+			await addContactToList(email, firstName || '', listId);
+		} catch (brevoErr) {
+			console.error('[brevo] addContact error (non-fatal):', brevoErr);
+		}
+
+		// 3. Envía el email con la guía vía Brevo
+		await sendGuideEmail(email, firstName || 'amiga');
 
 		return new Response(
 			JSON.stringify({
 				message: '¡Gracias! Tu guía está en camino a tu correo.',
 				registered: true,
 			}),
-			{
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			}
+			{ status: 200, headers: { 'Content-Type': 'application/json' } },
 		);
 	} catch (error) {
-		console.error('Download lead error:', error);
-		return new Response(
-			JSON.stringify({ message: 'No pudimos procesar tu solicitud. Intenta más tarde.' }),
-			{
-				status: 502,
-				headers: { 'Content-Type': 'application/json' },
-			}
-		);
+		console.error('[download-guide] error:', error);
+		return new Response(JSON.stringify({ message: 'No pudimos procesar tu solicitud. Intenta más tarde.' }), {
+			status: 502,
+			headers: { 'Content-Type': 'application/json' },
+		});
 	}
 };

@@ -16,3 +16,21 @@ web/.env.local
 
 # Deployment artifacts
 *.tar.gz
+
+# WordPress legacy (migrado a Astro)
+*.xml
+*.zip
+sitio_web_completo_zoraida/
+
+# Archivos locales del cliente (no versionar)
+V2-Zora/
+RESUMEN_PROYECTO_SEMILLASDETI_2026.pdf
+
+# Datos de usuarios (no versionar)
+web/src/data/leads.json
+
+# Imágenes sueltas en la raíz
+*.jpg
+*.jpeg
+*.png
+!web/public/**
